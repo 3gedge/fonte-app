@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aurelia Capital · Manager Console (powered by Fonte)</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%237A5AF8'/%3E%3Cpath d='M16 4.5C16 4.5 7.5 13.5 7.5 20a8.5 8.5 0 0 0 17 0C24.5 13.5 16 4.5 16 4.5Z' fill='white'/%3E%3C/svg%3E" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --brand:#7A5AF8; --brand-ink:#5B45C9; --brand-soft:#ECE6FB;
+  --bg:#FBFAF6; --bg-2:#F6F4ED; --surface:#fff; --surface-2:#F4F2EC;
+  --ink:#15161A; --ink-2:#585860; --ink-3:#8C8C93;
+  --line:#ECE9E0; --line-2:#E1DDD2;
+  --pos:#138A5E; --neg:#C0492F; --warn:#B8862A; --gold:#C9952F;
+  --pos-soft:#E2F2EA; --warn-soft:#FBF1DC; --neg-soft:#F8E5DF;
+  --radius:16px; --radius-sm:11px;
+  --shadow:0 1px 2px rgba(20,20,25,.04),0 6px 22px rgba(20,20,25,.05);
+  --shadow-lg:0 2px 8px rgba(20,20,25,.06),0 22px 56px rgba(20,20,25,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Hanken Grotesk",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.45}
+.serif{font-family:"Fraunces",Georgia,serif}
+.tnum{font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit}
+.pos{color:var(--pos)} .neg{color:var(--neg)} .warn{color:var(--warn)}
+
+/* ── shell ─────────────────────────────────────────────── */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.side{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:20px 18px 16px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--brand);display:grid;place-items:center;flex:none}
+.brand-mark svg{width:18px;height:18px}
+.brand-name{font-family:"Fraunces";font-weight:600;font-size:17px;letter-spacing:-.01em}
+.brand-tag{font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--brand-ink);background:var(--brand-soft);padding:3px 7px;border-radius:999px}
+.nav{padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+.nav-h{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:14px 10px 6px}
+.nav-i{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:10px;border:none;background:none;color:var(--ink-2);font-weight:600;font-size:13.5px;text-align:left;width:100%;transition:.12s}
+.nav-i svg{width:18px;height:18px;flex:none;opacity:.85}
+.nav-i:hover{background:var(--surface-2);color:var(--ink)}
+.nav-i.on{background:var(--brand-soft);color:var(--brand-ink)}
+.nav-i.on svg{opacity:1}
+.nav-i .pip{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;padding:0 5px}
+.side-foot{margin-top:auto;padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#9C84FB);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.side-foot .nm{font-weight:600;font-size:13px;line-height:1.2}
+.side-foot .rl{font-size:11px;color:var(--ink-3)}
+
+/* ── main ──────────────────────────────────────────────── */
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:16px;padding:18px 30px;border-bottom:1px solid var(--line);background:rgba(251,250,246,.85);backdrop-filter:saturate(160%) blur(10px);position:sticky;top:0;z-index:30}
+.burger{display:none;border:1px solid var(--line-2);background:var(--surface);border-radius:9px;width:38px;height:38px;align-items:center;justify-content:center}
+.pg-title{font-family:"Fraunces";font-weight:600;font-size:21px;letter-spacing:-.015em}
+.pg-sub{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;padding:8px 12px;min-width:210px;color:var(--ink-3)}
+.search input{border:none;background:none;outline:none;font:inherit;color:var(--ink);width:100%}
+.tb-brand{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--brand-ink);background:var(--brand-soft);padding:5px 9px;border-radius:999px;white-space:nowrap}
+.content{padding:26px 30px 60px;max-width:1180px;width:100%}
+.view{display:none}
+.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── primitives ────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid transparent;border-radius:10px;padding:9px 15px;font-weight:600;font-size:13.5px;transition:.12s;white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-brand{background:var(--brand);color:#fff}
+.btn-brand:hover{filter:brightness(1.06)}
+.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2)}
+.btn-ghost:hover{border-color:var(--ink-3);background:var(--surface-2)}
+.btn-sm{padding:6px 11px;font-size:12.5px;border-radius:8px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:11.5px;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.b-ok{background:var(--pos-soft);color:var(--pos)} .b-warn{background:var(--warn-soft);color:var(--warn)}
+.b-pend{background:#EAE7F3;color:var(--brand-ink)} .b-neut{background:var(--surface-2);color:var(--ink-2)}
+.b-neg{background:var(--neg-soft);color:var(--neg)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.sec-h{display:flex;align-items:center;gap:12px;margin:30px 0 14px}
+.sec-h h3{font-family:"Fraunces";font-weight:600;font-size:18px;margin:0}
+.sec-h .btn{margin-left:auto}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{padding:16px 17px}
+.kpi .lab{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);display:flex;align-items:center;gap:7px}
+.kpi .val{font-family:"Fraunces";font-weight:600;font-size:30px;letter-spacing:-.02em;margin-top:7px}
+.kpi .sub{font-size:12.5px;color:var(--ink-2);margin-top:3px;font-weight:500}
+
+/* grid split */
+.split{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:16px}
+.panel{padding:18px 19px}
+.panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.panel-h .t{font-weight:700;font-size:14.5px}
+.panel-h a{font-size:12.5px;color:var(--brand-ink);font-weight:600;text-decoration:none}
+
+/* feed */
+.feed{display:flex;flex-direction:column}
+.feed-i{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.feed-i:first-child{border-top:none}
+.feed-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--surface-2)}
+.feed-ic svg{width:15px;height:15px}
+.feed-b .tx{font-size:13px;font-weight:500}
+.feed-b .mt{font-size:11.5px;color:var(--ink-3);margin-top:2px}
+.feed-amt{margin-left:auto;font-weight:600;font-size:13px;white-space:nowrap}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2);text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+td{padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:.1s}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover{background:var(--bg-2)}
+.cell-name{display:flex;align-items:center;gap:11px}
+.cell-av{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:12px;color:#fff;flex:none}
+.muted{color:var(--ink-3)}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12px}
+
+/* toolbar */
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.field{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-2);border-radius:10px;padding:8px 12px;color:var(--ink-3)}
+.field input,.field select{border:none;background:none;outline:none;font:inherit;color:var(--ink)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(21,22,26,.34);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:.2s;z-index:60}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(460px,94vw);background:var(--surface);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:.28s cubic-bezier(.4,0,.2,1);z-index:70;overflow-y:auto}
+.drawer.on{transform:none}
+.drawer-h{display:flex;align-items:flex-start;gap:13px;padding:22px 22px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:2}
+.drawer-h .x{margin-left:auto;border:none;background:var(--surface-2);width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--ink-2);flex:none}
+.drawer-body{padding:20px 22px 40px}
+.dl-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 8px}
+.dl-stat{background:var(--surface-2);border-radius:11px;padding:12px 13px}
+.dl-stat .l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3)}
+.dl-stat .v{font-family:"Fraunces";font-weight:600;font-size:21px;margin-top:4px}
+.alloc{display:flex;align-items:center;gap:18px;margin:6px 0}
+.alloc-legend{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.alloc-legend .li{display:flex;align-items:center;gap:8px}
+.alloc-legend .sw{width:11px;height:11px;border-radius:3px;flex:none}
+.permrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.permrow:first-child{border-top:none}
+.permrow .pi{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none}
+.permrow .st{margin-left:auto;font-weight:600;font-size:12px}
+
+/* modal */
+.modal{position:fixed;inset:0;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.2s;z-index:80}
+.modal.on{opacity:1;pointer-events:auto}
+.modal-card{background:var(--surface);border-radius:20px;box-shadow:var(--shadow-lg);width:min(540px,96vw);max-height:92vh;overflow-y:auto;transform:translateY(10px) scale(.98);transition:.24s}
+.modal.on .modal-card{transform:none}
+.modal-h{padding:22px 24px 6px}
+.modal-h h3{font-family:"Fraunces";font-weight:600;font-size:20px;margin:0 0 4px}
+.modal-h p{color:var(--ink-2);font-size:13.5px;margin:0}
+.modal-b{padding:14px 24px 8px;display:flex;flex-direction:column;gap:14px}
+.modal-f{padding:16px 24px 22px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--line);margin-top:8px}
+.inp{display:flex;flex-direction:column;gap:6px}
+.inp label{font-size:12px;font-weight:600;color:var(--ink-2)}
+.inp input,.inp select{border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:10px 12px;font:inherit;color:var(--ink);outline:none}
+.inp input:focus,.inp select:focus{border-color:var(--brand)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;border:1px solid var(--line-2);background:var(--surface);border-radius:10px;padding:10px;font-weight:600;font-size:13px;color:var(--ink-2)}
+.seg button.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-ink)}
+
+/* misc */
+.gauge{position:relative;width:128px;height:128px;flex:none}
+.gauge .pct{position:absolute;inset:0;display:grid;place-items:center;font-family:"Fraunces";font-weight:600;font-size:28px}
+.attest{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.attest .a{background:var(--surface-2);border-radius:12px;padding:14px}
+.attest .a .l{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.attest .a .v{font-weight:700;font-size:15px;margin-top:5px;display:flex;align-items:center;gap:6px}
+.brand-prev{display:flex;align-items:center;gap:12px;padding:16px;border-radius:12px;background:var(--brand-soft);border:1px solid var(--line)}
+.swatches{display:flex;gap:9px;margin-top:8px}
+.swatches button{width:30px;height:30px;border-radius:8px;border:2px solid transparent}
+.swatches button.on{border-color:var(--ink)}
+.note{font-size:12px;color:var(--ink-3);display:flex;align-items:center;gap:7px;margin-top:14px}
+.note svg{width:14px;height:14px;flex:none}
+.portal-link{display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:12.5px}
+.portal-link>svg{width:15px;height:15px;color:var(--ink-3);flex:none}
+.portal-link .u{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2)}
+.portal-link button{border:1px solid var(--line-2);background:var(--surface);border-radius:7px;padding:5px 10px;font-weight:600;font-size:11.5px;color:var(--brand-ink);white-space:nowrap;cursor:pointer}
+.portal-link button:hover{border-color:var(--brand)}
+.intg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.intg-card{display:flex;align-items:center;gap:13px;padding:15px 16px}
+.intg-logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;flex:none}
+.intg-meta{min-width:0}
+.intg-meta .n{font-weight:700;font-size:14px;display:flex;align-items:center;gap:7px}
+.intg-meta .d{font-size:12px;color:var(--ink-3);margin-top:1px}
+.intg-card .act{margin-left:auto;display:flex;align-items:center;gap:6px;white-space:nowrap}
+@media(max-width:760px){.intg-grid{grid-template-columns:1fr}}
+
+/* toast */
+.toast-wrap{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:10px;z-index:120}
+.toast{background:var(--ink);color:#fff;padding:12px 16px;border-radius:11px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;transform:translateY(12px);opacity:0;animation:tin .25s forwards}
+.toast svg{width:17px;height:17px;color:#5BE0A8;flex:none}
+@keyframes tin{to{transform:none;opacity:1}}
+
+.demo-banner{background:linear-gradient(90deg,var(--brand-soft),var(--bg-2));border-bottom:1px solid var(--line);font-size:12.5px;color:var(--brand-ink);text-align:center;padding:7px 14px;font-weight:600}
+.demo-banner a{color:var(--brand-ink);font-weight:700}
+
+/* responsive */
+@media(max-width:1040px){.kpis{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}.attest{grid-template-columns:1fr}}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;z-index:90;transform:translateX(-100%);transition:.25s;width:260px}
+  .side.on{transform:none;box-shadow:var(--shadow-lg)}
+  .burger{display:inline-flex}
+  .search{display:none}
+  .content{padding:20px 16px 56px}
+  .topbar{padding:14px 16px}
+}
+@media(max-width:560px){.kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi .val{font-size:25px}.pg-title{font-size:18px}.dl-stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="toast-wrap" id="toasts"></div>
+<div class="scrim" id="scrim" onclick="closeAll()"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="side" id="side">
+    <div class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span>
+      <div><div class="brand-name" id="brandName">Aurelia</div></div>
+      <span class="brand-tag">WHITE-LABEL</span>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-h">Manage</div>
+      <button class="nav-i on" data-view="overview"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="5" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="12" width="7" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="16" width="7" height="5" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>Overview</button>
+      <button class="nav-i" data-view="clients"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18.5 19a5.2 5.2 0 0 0-3-4.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Clients<span class="pip">10</span></button>
+      <div class="nav-h">Oversight</div>
+      <button class="nav-i" data-view="reporting"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h8l4 4v14H6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v4h4M9 13l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Reporting</button>
+      <button class="nav-i" data-view="audit"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16l-3-2-2 2-2-2-2 2-2-2-3 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Audit trail</button>
+      <button class="nav-i" data-view="compliance"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Compliance<span class="pip">2</span></button>
+      <div class="nav-h">Settings</div>
+      <button class="nav-i" data-view="integrations"><svg viewBox="0 0 24 24" fill="none"><path d="M10 3v4M14 3v4M7 7h10v3.5a5 5 0 0 1-10 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 15.5V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Integrations<span class="pip">2</span></button>
+      <button class="nav-i" data-view="admin"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Admin</button>
+    </nav>
+    <div class="side-foot">
+      <span class="avatar">EM</span>
+      <div><div class="nm">Elena Marsh</div><div class="rl">Managing Partner</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="demo-banner">Interactive prototype · sample data · <a href="business.html">← back to Fonte for funds</a></div>
+    <header class="topbar">
+      <button class="burger" onclick="document.getElementById('side').classList.toggle('on')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+      <div>
+        <div class="pg-title" id="pgTitle">Overview</div>
+        <div class="pg-sub" id="pgSub">Your book of business at a glance</div>
+      </div>
+      <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="globalSearch" placeholder="Search clients…" oninput="goClients(this.value)"></label>
+      <span class="tb-brand">YOUR BRAND</span>
+    </header>
+
+    <div class="content">
+
+      <!-- ════ OVERVIEW ════ -->
+      <section class="view on" id="v-overview">
+        <div class="kpis">
+          <div class="kpi card"><div class="lab">Assets under mgmt</div><div class="val tnum">$29.0M</div><div class="sub pos">+$2.1M this quarter</div></div>
+          <div class="kpi card"><div class="lab">Clients</div><div class="val tnum">10</div><div class="sub">8 active · 2 onboarding</div></div>
+          <div class="kpi card"><div class="lab">Blended return YTD</div><div class="val tnum pos">+12.8%</div><div class="sub">weighted across mandates</div></div>
+          <div class="kpi card"><div class="lab">Fees earned (MTD)</div><div class="val tnum">$48.2K</div><div class="sub">high-water mark, accrued</div></div>
+        </div>
+
+        <div class="split">
+          <div class="panel card">
+            <div class="panel-h"><span class="t">AUM growth · trailing 12 months</span><span class="badge b-ok"><span class="dot"></span>+38% YoY</span></div>
+            <svg viewBox="0 0 640 230" width="100%" preserveAspectRatio="none" role="img" aria-label="AUM growth chart">
+              <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A5AF8" stop-opacity=".18"/><stop offset="1" stop-color="#7A5AF8" stop-opacity="0"/></linearGradient></defs>
+              <line x1="0" y1="60" x2="640" y2="60" stroke="#ECE9E0"/><line x1="0" y1="120" x2="640" y2="120" stroke="#ECE9E0"/><line x1="0" y1="180" x2="640" y2="180" stroke="#ECE9E0"/>
+              <path d="M0 190 C60 184 90 176 140 168 C190 160 210 150 270 138 C320 128 350 150 400 132 C450 116 480 96 520 86 C560 76 600 60 640 48 L640 230 L0 230Z" fill="url(#ag)"/>
+              <path d="M0 190 C60 184 90 176 140 168 C190 160 210 150 270 138 C320 128 350 150 400 132 C450 116 480 96 520 86 C560 76 600 60 640 48" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linecap="round"/>
+              <circle cx="640" cy="48" r="4.5" fill="#7A5AF8"/><circle cx="640" cy="48" r="2" fill="#fff"/>
+            </svg>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-3);margin-top:6px"><span>Jun '25</span><span>Sep</span><span>Dec</span><span>Mar '26</span><span>Jun</span></div>
+          </div>
+          <div class="panel card">
+            <div class="panel-h"><span class="t">Needs attention</span><a href="#" onclick="show('compliance');return false">View all</a></div>
+            <div class="feed">
+              <div class="feed-i"><span class="feed-ic" style="background:var(--warn-soft);color:var(--warn)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/></svg></span><div class="feed-b"><div class="tx">KYC refresh due, R. Delgado</div><div class="mt">Document expires in 6 days</div></div></div>
+              <div class="feed-i"><span class="feed-ic" style="background:var(--brand-soft);color:var(--brand-ink)"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M4 19a5 5 0 0 1 10 0" stroke="currentColor" stroke-width="1.8"/><path d="M18 8v6M15 11h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div class="feed-b"><div class="tx">2 clients in onboarding</div><div class="mt">J. Tanaka awaiting wallet deploy</div></div></div>
+              <div class="feed-i"><span class="feed-ic" style="background:var(--pos-soft);color:var(--pos)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="feed-b"><div class="tx">Q2 statements ready</div><div class="mt">10 reports queued to send</div></div><button class="btn btn-ghost btn-sm" onclick="show('reporting')">Review</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-h"><h3>Recent activity</h3><button class="btn btn-ghost btn-sm" onclick="show('audit')">Full audit trail →</button></div>
+        <div class="panel card"><div class="feed" id="ovFeed"></div></div>
+      </section>
+
+      <!-- ════ CLIENTS ════ -->
+      <section class="view" id="v-clients">
+        <div class="toolbar">
+          <div class="chips" id="clientFilters">
+            <button class="chip on" data-f="all">All</button>
+            <button class="chip" data-f="Family Office">Family offices</button>
+            <button class="chip" data-f="Trust">Trusts</button>
+            <button class="chip" data-f="Individual">Individuals</button>
+            <button class="chip" data-f="Institutional">Institutional</button>
+          </div>
+          <label class="field" style="margin-left:auto"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input id="clientSearch" placeholder="Search…" oninput="renderClients()"></label>
+          <button class="btn btn-brand" onclick="openModal('addClient')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add client</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>Type</th><th>Mandate</th><th>AUM</th><th>YTD</th><th>Status</th><th></th></tr></thead>
+            <tbody id="clientRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════ REPORTING ════ -->
+      <section class="view" id="v-reporting">
+        <div class="split" style="margin-top:0">
+          <div class="panel card">
+            <div class="panel-h"><span class="t">Generate a report</span></div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div class="inp"><label>Client</label><select id="rpClient"><option>All clients (book summary)</option></select></div>
+              <div class="inp"><label>Report type</label>
+                <div class="seg" id="rpType">
+                  <button class="on" data-v="Performance statement">Performance</button>
+                  <button data-v="Holdings &amp; allocation">Holdings</button>
+                  <button data-v="Fee &amp; billing summary">Fees</button>
+                </div>
+              </div>
+              <div class="inp"><label>Period</label><select id="rpPeriod"><option>Q2 2026 (Apr–Jun)</option><option>Q1 2026 (Jan–Mar)</option><option>Full year 2025</option><option>Month to date</option></select></div>
+              <button class="btn btn-brand" style="justify-content:center" onclick="generateReport()"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M8 11l4 4 4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Generate report</button>
+              <div class="note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Statements are generated from on-chain NAV. Figures reconcile to the blockchain, not a spreadsheet.</div>
+            </div>
+          </div>
+          <div class="panel card">
+            <div class="panel-h"><span class="t">This quarter</span></div>
+            <div class="kpi" style="padding:0"><div class="lab">Reports generated</div><div class="val tnum">128</div><div class="sub">across 10 clients · auto-scheduled</div></div>
+            <div style="height:1px;background:var(--line);margin:16px 0"></div>
+            <div class="feed">
+              <div class="feed-i"><span class="feed-ic" style="background:var(--brand-soft);color:var(--brand-ink)"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3h9l5 5v13H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div class="feed-b"><div class="tx">Auto-delivery: on</div><div class="mt">Statements emailed on the 1st, under your brand</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sec-h"><h3>Generated reports</h3><button class="btn btn-ghost btn-sm" onclick="toast('Exported reports.csv')">Export list</button></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Report</th><th>Client</th><th>Period</th><th>Created</th><th>Status</th><th></th></tr></thead>
+            <tbody id="reportRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════ AUDIT ════ -->
+      <section class="view" id="v-audit">
+        <div class="toolbar">
+          <div class="chips" id="auditFilters">
+            <button class="chip on" data-f="all">All events</button>
+            <button class="chip" data-f="Rebalance">Rebalances</button>
+            <button class="chip" data-f="Fee">Fees</button>
+            <button class="chip" data-f="Permission">Permissions</button>
+            <button class="chip" data-f="Client">Client</button>
+            <button class="chip" data-f="Security">Security</button>
+          </div>
+          <button class="btn btn-ghost" style="margin-left:auto" onclick="toast('Exported audit-trail.csv')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M8 11l4 4 4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Export CSV</button>
+        </div>
+        <div class="note" style="margin:-4px 0 14px"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.7"/></svg>Every action is timestamped and anchored to an on-chain transaction. This log is append-only. Entries can be exported but never edited or deleted.</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Time (EDT)</th><th>Event</th><th>Actor</th><th>Client</th><th>On-chain</th><th>Status</th></tr></thead>
+            <tbody id="auditRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════ COMPLIANCE ════ -->
+      <section class="view" id="v-compliance">
+        <div class="split" style="margin-top:0">
+          <div class="panel card" style="display:flex;align-items:center;gap:22px">
+            <div class="gauge"><svg viewBox="0 0 120 120" width="128" height="128"><circle cx="60" cy="60" r="50" fill="none" stroke="#ECE9E0" stroke-width="12"/><circle cx="60" cy="60" r="50" fill="none" stroke="#138A5E" stroke-width="12" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="38" transform="rotate(-90 60 60)"/></svg><span class="pct pos">88%</span></div>
+            <div>
+              <div class="eyebrow">Compliance health</div>
+              <h3 class="serif" style="margin:6px 0 4px;font-size:20px">8 of 10 fully cleared</h3>
+              <p style="color:var(--ink-2);margin:0;font-size:13.5px;max-width:34ch">2 clients have an open item. Nothing is blocking trading; both are within their grace window.</p>
+            </div>
+          </div>
+          <div class="panel card">
+            <div class="panel-h"><span class="t">Custody attestation</span><span class="badge b-ok"><span class="dot"></span>Verified</span></div>
+            <p style="color:var(--ink-2);font-size:13px;margin:0 0 12px">Non-custodial across the entire book. The manage permission can trade and rebalance but can never withdraw client funds.</p>
+            <div class="permrow"><span class="pi" style="background:var(--pos-soft);color:var(--pos)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Trade BTC/ETH · lend &amp; provide stablecoin liquidity<span class="st pos">Allowed</span></div>
+            <div class="permrow"><span class="pi" style="background:var(--pos-soft);color:var(--pos)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rebalance the cycle<span class="st pos">Allowed</span></div>
+            <div class="permrow"><span class="pi" style="background:var(--neg-soft);color:var(--neg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>Withdraw client funds<span class="st neg">Blocked</span></div>
+          </div>
+        </div>
+        <div class="sec-h"><h3>Client compliance matrix</h3><button class="btn btn-ghost btn-sm" onclick="toast('Compliance pack exported (PDF)')">Export pack</button></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>KYC / AML</th><th>Suitability</th><th>Risk disclosure</th><th>Jurisdiction</th><th></th></tr></thead>
+            <tbody id="complianceRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════ ADMIN ════ -->
+      <section class="view" id="v-admin">
+        <div class="split" style="margin-top:0">
+          <div class="panel card">
+            <div class="panel-h"><span class="t">White-label branding</span><span class="badge b-pend">Live preview</span></div>
+            <div class="brand-prev" id="brandPrev">
+              <span class="brand-mark" style="background:var(--brand)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span>
+              <div><div class="brand-name" id="brandPrevName">Aurelia</div><div class="mono" style="color:var(--ink-3)">portfolios.aureliacap.com</div></div>
+            </div>
+            <div class="inp" style="margin-top:14px"><label>Firm name</label><input id="firmName" value="Aurelia" oninput="setBrandName(this.value)"></div>
+            <div class="inp" style="margin-top:12px"><label>Brand color</label>
+              <div class="swatches" id="swatches">
+                <button data-c="#7A5AF8" class="on" style="background:#7A5AF8"></button>
+                <button data-c="#0E7C66" style="background:#0E7C66"></button>
+                <button data-c="#C9952F" style="background:#C9952F"></button>
+                <button data-c="#2563EB" style="background:#2563EB"></button>
+                <button data-c="#15161A" style="background:#15161A"></button>
+                <button data-c="#C0492F" style="background:#C0492F"></button>
+              </div>
+            </div>
+            <button class="btn btn-brand btn-sm" style="margin-top:16px" onclick="toast('Branding saved, clients see it instantly')">Save branding</button>
+          </div>
+          <div class="panel card">
+            <div class="panel-h"><span class="t">Plan &amp; usage</span><span class="badge b-ok">Family Office</span></div>
+            <div class="kpi" style="padding:0"><div class="lab">Client portfolios</div><div class="val tnum">10 <span style="font-size:15px;color:var(--ink-3)">/ 200</span></div><div class="sub">$1,499/mo · + 0.5% high-water mark</div></div>
+            <div style="height:8px;background:var(--surface-2);border-radius:99px;margin:14px 0;overflow:hidden"><div style="height:100%;width:5%;background:var(--brand);border-radius:99px"></div></div>
+            <button class="btn btn-ghost btn-sm" onclick="toast('Opening billing portal…')">Manage billing</button>
+          </div>
+        </div>
+        <div class="sec-h"><h3>Team &amp; roles</h3><button class="btn btn-brand btn-sm" onclick="openModal('addMember')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Invite member</button></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Member</th><th>Email</th><th>Role</th><th>Access</th><th></th></tr></thead>
+            <tbody id="teamRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════ INTEGRATIONS ════ -->
+      <section class="view" id="v-integrations">
+        <div class="sec-h" style="margin-top:0"><h3>Connected</h3></div>
+        <div class="intg-grid" id="intgConnected"></div>
+        <div class="sec-h"><h3>Available integrations</h3></div>
+        <div class="intg-grid" id="intgAvailable"></div>
+        <div class="card" style="margin-top:20px;padding:20px;border-style:dashed;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span class="intg-logo" style="background:var(--brand-soft);color:var(--brand-ink)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+          <div style="flex:1;min-width:200px"><div style="font-weight:700;font-size:15px">Need something else?</div><div class="muted" style="font-size:13px;margin-top:3px">Custodians, fund admins, tax tools, or your own internal systems. We'll build the connection.</div></div>
+          <button class="btn btn-brand" onclick="openModal('customIntegration')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Request custom integration</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER (client detail) -->
+<div class="drawer" id="drawer"><div id="drawerContent"></div></div>
+
+<!-- MODAL -->
+<div class="modal" id="modal"><div class="modal-card" id="modalCard"></div></div>
+
+<script>
+// ── sample data ───────────────────────────────────────────
+const palette = ['#7A5AF8','#0E7C66','#C9952F','#2563EB','#15161A','#C0492F','#0EA5A0','#9333EA'];
+const CLIENTS = [
+  {id:1, name:'The Hartwell Family Office', type:'Family Office', mandate:'Balanced', aum:2.10, ytd:12.6, status:'Active'},
+  {id:2, name:'Castellan Trust', type:'Trust', mandate:'Conservative', aum:5.60, ytd:8.9, status:'Active'},
+  {id:3, name:'Okonkwo Private', type:'Individual', mandate:'Aggressive', aum:0.88, ytd:18.2, status:'Active'},
+  {id:4, name:'Brightwater Holdings', type:'Family Office', mandate:'Balanced', aum:3.40, ytd:12.1, status:'Active'},
+  {id:5, name:'R. Delgado', type:'Individual', mandate:'Conservative', aum:0.42, ytd:8.4, status:'Review'},
+  {id:6, name:'Meridian Endowment', type:'Institutional', mandate:'Balanced', aum:7.80, ytd:11.9, status:'Active'},
+  {id:7, name:'S. Voss', type:'Individual', mandate:'Aggressive', aum:1.20, ytd:17.6, status:'Active'},
+  {id:8, name:'The Lindqvist Trust', type:'Trust', mandate:'Conservative', aum:2.90, ytd:9.1, status:'Active'},
+  {id:9, name:'Ashcombe Partners', type:'Family Office', mandate:'Aggressive', aum:4.10, ytd:19.4, status:'Active'},
+  {id:10, name:'Tanaka Holdings', type:'Individual', mandate:'Balanced', aum:0.64, ytd:12.3, status:'Onboarding'},
+];
+const MANDATE_ALLOC = {
+  Conservative:[['BTC / ETH basket',60,'#15161A'],['msUSD/USDC LP cushion',40,'#0E7C66']],
+  Balanced:[['BTC / ETH basket',80,'#15161A'],['msUSD/USDC LP cushion',20,'#0E7C66']],
+  Aggressive:[['BTC / ETH basket',100,'#15161A']],
+};
+const REPORTS = [
+  {name:'Q2 2026 Performance', client:'Book summary', period:'Q2 2026', created:'Jun 14, 2026', status:'Ready'},
+  {name:'Q2 2026 Performance', client:'Meridian Endowment', period:'Q2 2026', created:'Jun 14, 2026', status:'Sent'},
+  {name:'Holdings & allocation', client:'Ashcombe Partners', period:'Jun 2026', created:'Jun 12, 2026', status:'Sent'},
+  {name:'Fee & billing summary', client:'Book summary', period:'May 2026', created:'Jun 1, 2026', status:'Sent'},
+  {name:'Q1 2026 Performance', client:'The Hartwell Family Office', period:'Q1 2026', created:'Apr 2, 2026', status:'Sent'},
+];
+const AUDIT = [
+  {t:'Jun 15, 14:32', cat:'Rebalance', event:'Cycle rebalance → 100% msUSD/USDC LP', actor:'Keeper', client:'Castellan Trust', tx:'0x9c4a…1f7b', status:'Confirmed'},
+  {t:'Jun 15, 14:31', cat:'Rebalance', event:'Cycle rebalance → 100% msUSD/USDC LP', actor:'Keeper', client:'Meridian Endowment', tx:'0x2db8…aa90', status:'Confirmed'},
+  {t:'Jun 15, 09:02', cat:'Fee', event:'High-water mark fee accrued ($1,240)', actor:'System', client:'Ashcombe Partners', tx:'0x77e1…34c2', status:'Confirmed'},
+  {t:'Jun 14, 18:20', cat:'Client', event:'Report delivered, Q2 statement', actor:'Elena Marsh', client:'Meridian Endowment', tx:'–', status:'Sent'},
+  {t:'Jun 14, 11:48', cat:'Security', event:'Withdrawal attempt blocked by policy', actor:'Policy guard', client:'Okonkwo Private', tx:'0x51aa…d0e3', status:'Blocked'},
+  {t:'Jun 13, 16:05', cat:'Permission', event:'Manage permission granted (scoped)', actor:'Client wallet', client:'Tanaka Holdings', tx:'0xbb20…77f1', status:'Confirmed'},
+  {t:'Jun 13, 15:58', cat:'Client', event:'New client onboarded', actor:'Elena Marsh', client:'Tanaka Holdings', tx:'–', status:'Done'},
+  {t:'Jun 12, 10:14', cat:'Rebalance', event:'Drift rebalance within mandate', actor:'Keeper', client:'Brightwater Holdings', tx:'0x3f9c…1b44', status:'Confirmed'},
+  {t:'Jun 11, 08:00', cat:'Fee', event:'Monthly platform fee invoiced', actor:'System', client:'–', tx:'–', status:'Paid'},
+  {t:'Jun 10, 13:22', cat:'Permission', event:'KYC document refreshed', actor:'R. Delgado', client:'R. Delgado', tx:'–', status:'Pending'},
+];
+const COMPLIANCE = {
+  1:['ok','ok','ok','US'], 2:['ok','ok','ok','US'], 3:['ok','ok','ok','UK'], 4:['ok','ok','ok','US'],
+  5:['warn','ok','ok','US'], 6:['ok','ok','ok','US'], 7:['ok','ok','ok','CH'], 8:['ok','ok','ok','SE'],
+  9:['ok','ok','ok','UK'], 10:['ok','warn','ok','JP'],
+};
+const TEAM = [
+  {n:'Elena Marsh', e:'elena@aureliacap.com', role:'Managing Partner', access:'Full'},
+  {n:'David Okafor', e:'david@aureliacap.com', role:'Portfolio Ops', access:'Manage + report'},
+  {n:'Priya Nair', e:'priya@aureliacap.com', role:'Compliance', access:'Compliance + audit'},
+  {n:'Tom Beck', e:'tom@aureliacap.com', role:'Client Advisor', access:'Read-only'},
+];
+const INTEGRATIONS = [
+  {id:'plaid', name:'Plaid', desc:'Bank & account aggregation', connected:true, def:true, color:'#0A0B0D', letter:'P'},
+  {id:'salesforce', name:'Salesforce', desc:'CRM & client records', connected:true, def:true, color:'#00A1E0', letter:'S'},
+  {id:'stripe', name:'Stripe', desc:'Billing & subscriptions', connected:false, color:'#635BFF', letter:'S'},
+  {id:'addepar', name:'Addepar', desc:'Portfolio accounting & reporting', connected:false, color:'#14315B', letter:'A'},
+  {id:'carta', name:'Carta', desc:'Cap table & entity management', connected:false, color:'#14233A', letter:'C'},
+  {id:'quickbooks', name:'QuickBooks', desc:'Bookkeeping & accounting', connected:false, color:'#2CA01C', letter:'Q'},
+  {id:'xero', name:'Xero', desc:'Accounting', connected:false, color:'#13B5EA', letter:'X'},
+  {id:'docusign', name:'DocuSign', desc:'E-signature & agreements', connected:false, color:'#D6472E', letter:'D'},
+];
+const VIEWS = {
+  overview:['Overview','Your book of business at a glance'],
+  clients:['Clients','Every account you manage, in one place'],
+  reporting:['Reporting','Branded statements, generated from on-chain NAV'],
+  audit:['Audit trail','An append-only, on-chain-anchored record of every action'],
+  compliance:['Compliance','KYC, suitability, and custody status across the book'],
+  integrations:['Integrations','Connect your CRM, billing, custody, and reporting stack'],
+  admin:['Admin','Branding, team, plan, and settings'],
+};
+const initials = n => n.replace(/^(The|R\.|S\.|J\.)\s/,'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const color = id => palette[(id*5)%palette.length];
+const money = m => '$'+(m>=1?m.toFixed(2)+'M':(m*1000).toFixed(0)+'K');
+function vaultAddr(id){let h='';for(let i=0;i<40;i++){h+=((((id*97+i*131+7)>>>0)*2654435761>>>(i%6*3))&15).toString(16);}return '0x'+h;}
+const vaultShort=id=>{const a=vaultAddr(id);return a.slice(0,6)+'…'+a.slice(-4);};
+const portalUrl=id=>`https://app.fonte.finance/?ref=aurelia&vault=${vaultAddr(id)}`;
+function copyPortal(url){try{navigator.clipboard.writeText(url);}catch(e){}toast('Portal link copied');}
+const statusBadge = s => ({Active:'b-ok',Onboarding:'b-pend',Review:'b-warn'}[s]||'b-neut');
+
+// ── navigation ────────────────────────────────────────────
+function show(v){
+  document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on', e.id==='v-'+v));
+  document.querySelectorAll('.nav-i').forEach(b=>b.classList.toggle('on', b.dataset.view===v));
+  document.getElementById('pgTitle').textContent = VIEWS[v][0];
+  document.getElementById('pgSub').textContent = VIEWS[v][1];
+  document.getElementById('side').classList.remove('on');
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.nav-i').forEach(b=>b.onclick=()=>show(b.dataset.view));
+function goClients(q){ show('clients'); document.getElementById('clientSearch').value=q; renderClients(); }
+
+// ── render: clients ───────────────────────────────────────
+let clientFilter='all';
+document.querySelectorAll('#clientFilters .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('#clientFilters .chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); clientFilter=c.dataset.f; renderClients();
+});
+function renderClients(){
+  const q=(document.getElementById('clientSearch').value||'').toLowerCase();
+  const rows=CLIENTS.filter(c=>(clientFilter==='all'||c.type===clientFilter)&&c.name.toLowerCase().includes(q));
+  document.getElementById('clientRows').innerHTML = rows.map(c=>`
+    <tr class="clickable" onclick="openClient(${c.id})">
+      <td><div class="cell-name"><span class="cell-av" style="background:${color(c.id)}">${initials(c.name)}</span><div><div style="font-weight:600">${c.name}</div><div class="muted mono" style="font-size:11px">${vaultShort(c.id)}</div></div></div></td>
+      <td class="muted">${c.type}</td>
+      <td>${c.mandate}</td>
+      <td class="tnum" style="font-weight:600">${money(c.aum)}</td>
+      <td class="tnum pos" style="font-weight:600">+${c.ytd}%</td>
+      <td><span class="badge ${statusBadge(c.status)}"><span class="dot"></span>${c.status}</span></td>
+      <td style="text-align:right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:#8C8C93"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+    </tr>`).join('') || `<tr><td colspan="7" class="muted" style="text-align:center;padding:34px">No clients match.</td></tr>`;
+}
+
+// donut svg
+function donut(slices){
+  let off=0, segs=slices.map(([_,pct,col])=>{const dash=pct/100*264; const s=`<circle cx="48" cy="48" r="42" fill="none" stroke="${col}" stroke-width="12" stroke-dasharray="${dash} 264" stroke-dashoffset="${-off}" transform="rotate(-90 48 48)"/>`; off+=dash; return s;}).join('');
+  return `<svg viewBox="0 0 96 96" width="118" height="118">${segs}</svg>`;
+}
+function openClient(id){
+  const c=CLIENTS.find(x=>x.id===id);
+  const alloc=MANDATE_ALLOC[c.mandate];
+  const comp=COMPLIANCE[id];
+  const cm=(v,l)=>`<div class="permrow"><span class="pi" style="background:${v==='ok'?'var(--pos-soft)':'var(--warn-soft)'};color:${v==='ok'?'var(--pos)':'var(--warn)'}">${v==='ok'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>':'!'}</span>${l}<span class="st ${v==='ok'?'pos':'warn'}">${v==='ok'?'Cleared':'Action due'}</span></div>`;
+  document.getElementById('drawerContent').innerHTML=`
+    <div class="drawer-h">
+      <span class="cell-av" style="width:42px;height:42px;border-radius:11px;font-size:15px;background:${color(id)}">${initials(c.name)}</span>
+      <div><div style="font-family:Fraunces;font-weight:600;font-size:18px">${c.name}</div><div class="muted" style="font-size:12.5px">${c.type} · ${c.mandate} mandate</div></div>
+      <button class="x" onclick="closeAll()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="dl-stats">
+        <div class="dl-stat"><div class="l">NAV</div><div class="v tnum">${money(c.aum)}</div></div>
+        <div class="dl-stat"><div class="l">Return YTD</div><div class="v tnum pos">+${c.ytd}%</div></div>
+        <div class="dl-stat"><div class="l">Status</div><div class="v" style="font-size:16px"><span class="badge ${statusBadge(c.status)}"><span class="dot"></span>${c.status}</span></div></div>
+        <div class="dl-stat"><div class="l">Since</div><div class="v" style="font-size:16px">Mar 2025</div></div>
+      </div>
+      <div class="eyebrow" style="margin:18px 0 8px">Client portal</div>
+      <div class="portal-link">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="u mono">app.fonte.finance/v/${vaultShort(id)}</span>
+        <button onclick="copyPortal('${portalUrl(id)}')">Copy</button>
+      </div>
+      <a href="${portalUrl(id)}" target="_blank" rel="noopener" class="btn btn-brand" style="width:100%;justify-content:center;margin-top:10px"><svg viewBox="0 0 24 24" fill="none"><path d="M14 4h6v6M20 4l-9 9M9 5H5v14h14v-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Open client portal</a>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Client opens this link, connects their wallet, and lands on their own vault dashboard, under your brand.</div>
+      <div class="eyebrow" style="margin:18px 0 10px">Allocation · ${c.mandate} (current phase)</div>
+      <div class="alloc">${donut(alloc)}<div class="alloc-legend">${alloc.map(([n,p,col])=>`<div class="li"><span class="sw" style="background:${col}"></span>${n} <b style="margin-left:auto" class="tnum">${p}%</b></div>`).join('')}<div class="li muted" style="font-size:11.5px;margin-top:4px">Currently in the bear phase → 100% msUSD/USDC stablecoin LP</div></div></div>
+      <div class="eyebrow" style="margin:20px 0 6px">Compliance</div>
+      ${cm(comp[0],'KYC / AML')}${cm(comp[1],'Suitability assessment')}${cm(comp[2],'Risk disclosure signed')}
+      <div class="permrow">Jurisdiction<span class="st muted">${comp[3]}</span></div>
+      <div style="display:flex;gap:9px;margin-top:20px">
+        <button class="btn btn-brand" style="flex:1;justify-content:center" onclick="toast('Statement generated for ${c.name.replace(/'/g,'')}')">Generate statement</button>
+        <button class="btn btn-ghost" onclick="toast('Opened message composer')"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4z" stroke="currentColor" stroke-width="1.7"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.7"/></svg></button>
+      </div>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7"/></svg>Non-custodial. ${c.name.replace(/'/g,'')} holds the keys. You manage strategy only.</div>
+    </div>`;
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+}
+
+// ── render: reports ───────────────────────────────────────
+function renderReports(){
+  document.getElementById('reportRows').innerHTML=REPORTS.map(r=>`
+    <tr><td style="font-weight:600">${r.name}</td><td class="muted">${r.client}</td><td>${r.period}</td><td class="muted">${r.created}</td>
+    <td><span class="badge ${r.status==='Sent'?'b-neut':'b-ok'}"><span class="dot"></span>${r.status}</span></td>
+    <td style="text-align:right"><button class="btn btn-ghost btn-sm" onclick="openReportDoc('${r.name.replace(/'/g,"\\'")}','${r.client.replace(/'/g,"\\'")}','${r.period.replace(/'/g,"\\'")}')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M8 11l4 4 4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>PDF</button></td></tr>`).join('');
+  const sel=document.getElementById('rpClient'); sel.innerHTML='<option>All clients (book summary)</option>'+CLIENTS.map(c=>`<option>${c.name}</option>`).join('');
+}
+document.querySelectorAll('#rpType button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#rpType button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+function generateReport(){
+  const client=document.getElementById('rpClient').value;
+  const type=document.querySelector('#rpType button.on').dataset.v;
+  const period=document.getElementById('rpPeriod').value;
+  REPORTS.unshift({name:type, client, period, created:'Jun 15, 2026', status:'Ready'});
+  renderReports();
+  toast(`${type} generated · ${period}`);
+  openReportDoc(type, client, period);
+}
+
+// Build a branded, print-ready statement in a new tab → user saves as PDF.
+function openReportDoc(name, client, period){
+  const c=CLIENTS.find(x=>x.name===client);
+  const aumM=c?c.aum:29.0;
+  const nav=c?money(c.aum):'$29.0M';
+  const ytd=c?('+'+c.ytd.toFixed(1)+'%'):'+12.8%';
+  const mandate=c?c.mandate:'Blended book';
+  const alloc=MANDATE_ALLOC[c?c.mandate:'Balanced']||MANDATE_ALLOC.Balanced;
+  const brand=getComputedStyle(document.documentElement).getPropertyValue('--brand').trim()||'#7A5AF8';
+  const firm=document.getElementById('brandName').textContent||'Aurelia';
+  const rid='AUR-'+Math.abs((name+client+period).split('').reduce((a,ch)=>((a<<5)-a+ch.charCodeAt(0))|0,0)).toString(16).slice(0,6).toUpperCase();
+  const rows=alloc.map(([n,p,col])=>`<tr><td><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${col};margin-right:9px;vertical-align:middle"></span>${n}</td><td style="text-align:right">${p}%</td><td style="text-align:right">${money(aumM*p/100)}</td></tr>`).join('');
+  const html=`<!doctype html><html><head><meta charset="utf-8"><title>${name}, ${client}</title>
+  <style>@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box}body{font-family:'Hanken Grotesk',sans-serif;color:#15161A;margin:0;background:#f1efe8;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bar{max-width:780px;margin:22px auto 0;text-align:right}
+  .pbtn{font-family:inherit;background:${brand};color:#fff;border:none;border-radius:9px;padding:10px 18px;font-weight:600;font-size:13px;cursor:pointer}
+  .pg{max-width:780px;margin:14px auto 40px;background:#fff;padding:46px 54px;box-shadow:0 12px 44px rgba(0,0,0,.09)}
+  .hd{display:flex;align-items:center;gap:12px;border-bottom:3px solid ${brand};padding-bottom:18px}
+  .mk{width:38px;height:38px;border-radius:11px;background:${brand};display:grid;place-items:center}.mk svg{width:21px;height:21px}
+  .fn{font-family:'Fraunces';font-weight:600;font-size:22px}
+  .dt{margin-left:auto;font-size:11px;color:#8C8C93;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+  h1{font-family:'Fraunces';font-weight:600;font-size:27px;margin:26px 0 4px}
+  .meta{display:flex;gap:34px;flex-wrap:wrap;color:#585860;font-size:12.5px;margin-bottom:26px}.meta b{color:#15161A;font-size:13.5px}
+  .kpis{display:flex;gap:14px;margin-bottom:8px}
+  .k{flex:1;background:#F4F2EC;border-radius:12px;padding:15px 16px}
+  .k .l{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8C8C93}
+  .k .v{font-family:'Fraunces';font-weight:600;font-size:24px;margin-top:6px}.pos{color:#138A5E}
+  h2{font-family:'Fraunces';font-weight:600;font-size:16px;margin:26px 0 10px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  td,th{padding:9px 6px;border-bottom:1px solid #ECE9E0;text-align:left}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#8C8C93}
+  p{font-size:13px;line-height:1.65;color:#3a3a40}
+  .ft{margin-top:30px;border-top:1px solid #ECE9E0;padding-top:16px;font-size:10.5px;color:#9a9aa0;line-height:1.6}
+  @media print{.bar{display:none}body{background:#fff}.pg{box-shadow:none;margin:0;max-width:none;padding:32px 38px}}
+  </style></head><body>
+  <div class="bar"><button class="pbtn" onclick="window.print()">⤓ Save as PDF / Print</button></div>
+  <div class="pg">
+    <div class="hd"><span class="mk"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span><span class="fn">${firm} Capital</span><span class="dt">${name}</span></div>
+    <h1>${client}</h1>
+    <div class="meta"><div>Period<br><b>${period}</b></div><div>Mandate<br><b>${mandate}</b></div><div>Report ID<br><b>${rid}</b></div><div>Generated<br><b>Jun 15, 2026</b></div></div>
+    <div class="kpis"><div class="k"><div class="l">Net asset value</div><div class="v">${nav}</div></div><div class="k"><div class="l">Return (YTD, net)</div><div class="v pos">${ytd}</div></div><div class="k"><div class="l">Performance fee</div><div class="v">${money(aumM*0.005)}</div></div></div>
+    <h2>Allocation</h2>
+    <table><thead><tr><th>Sleeve</th><th style="text-align:right">Weight</th><th style="text-align:right">Value</th></tr></thead><tbody>${rows}</tbody></table>
+    <h2>Summary</h2>
+    <p>Over ${period}, the ${mandate.toLowerCase()} mandate returned ${ytd} net of fees. The portfolio is currently in the bear phase of the halving cycle and is positioned in a stablecoin LP (msUSD/USDC on Aerodrome), auto-rebalanced to stay in range, earning fees and rewards ahead of the next accumulation window. All figures are derived from on-chain net asset value and reconcile to the underlying blockchain.</p>
+    <h2>Custody</h2>
+    <p>This account is non-custodial. ${client} retains sole control of the underlying wallet at all times. ${firm} Capital holds a scoped, revocable permission to manage strategy and rebalance. It can never withdraw or transfer client funds.</p>
+    <div class="ft">Generated from on-chain data for informational purposes only; not investment advice. Past performance is not indicative of future results. Digital assets are volatile and may lose value. ${firm} Capital · powered by Fonte.</div>
+  </div></body></html>`;
+  const w=window.open('','_blank');
+  if(!w){toast('Allow pop-ups to open the report');return;}
+  w.document.write(html); w.document.close();
+}
+
+// ── render: audit ─────────────────────────────────────────
+let auditFilter='all';
+document.querySelectorAll('#auditFilters .chip').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('#auditFilters .chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); auditFilter=c.dataset.f; renderAudit();
+});
+const auditStatusBadge=s=>({Confirmed:'b-ok',Sent:'b-neut',Done:'b-ok',Paid:'b-ok',Blocked:'b-neg',Pending:'b-warn'}[s]||'b-neut');
+function renderAudit(){
+  const rows=AUDIT.filter(a=>auditFilter==='all'||a.cat===auditFilter);
+  document.getElementById('auditRows').innerHTML=rows.map(a=>`
+    <tr><td class="muted mono" style="white-space:nowrap">${a.t}</td><td style="font-weight:500">${a.event}</td>
+    <td class="muted">${a.actor}</td><td>${a.client}</td>
+    <td>${a.tx==='–'?'<span class="muted">–</span>':`<span class="mono" style="color:var(--brand-ink)">${a.tx}</span>`}</td>
+    <td><span class="badge ${auditStatusBadge(a.status)}"><span class="dot"></span>${a.status}</span></td></tr>`).join('');
+}
+
+// ── render: compliance + team ─────────────────────────────
+function complianceCell(v){return v==='ok'?'<span class="badge b-ok"><span class="dot"></span>Cleared</span>':'<span class="badge b-warn"><span class="dot"></span>Action due</span>';}
+function renderCompliance(){
+  document.getElementById('complianceRows').innerHTML=CLIENTS.map(c=>{const m=COMPLIANCE[c.id];return `
+    <tr><td><div class="cell-name"><span class="cell-av" style="width:26px;height:26px;font-size:10px;background:${color(c.id)}">${initials(c.name)}</span><span style="font-weight:600">${c.name}</span></div></td>
+    <td>${complianceCell(m[0])}</td><td>${complianceCell(m[1])}</td><td>${complianceCell(m[2])}</td><td class="muted">${m[3]}</td>
+    <td style="text-align:right">${(m[0]==='ok'&&m[1]==='ok')?'<span class="muted" style="font-size:12px">–</span>':`<button class="btn btn-ghost btn-sm" onclick="toast('Reminder sent to ${c.name.replace(/'/g,'')}')">Send reminder</button>`}</td></tr>`;}).join('');
+}
+function renderTeam(){
+  document.getElementById('teamRows').innerHTML=TEAM.map(t=>`
+    <tr><td><div class="cell-name"><span class="avatar" style="width:30px;height:30px;font-size:11px">${t.n.split(' ').map(w=>w[0]).join('')}</span><span style="font-weight:600">${t.n}</span></div></td>
+    <td class="muted mono" style="font-size:12px">${t.e}</td><td>${t.role}</td><td><span class="badge b-neut">${t.access}</span></td>
+    <td style="text-align:right"><button class="btn btn-ghost btn-sm" onclick="toast('Editing ${t.n}')">Edit</button></td></tr>`).join('');
+}
+
+// ── render: integrations ──────────────────────────────────
+function intgCard(i){
+  return `<div class="intg-card card">
+    <span class="intg-logo" style="background:${i.color}">${i.letter}</span>
+    <div class="intg-meta"><div class="n">${i.name}${i.def?' <span class="badge b-neut" style="font-size:10px;padding:2px 7px">Default</span>':''}</div><div class="d">${i.desc}</div></div>
+    <div class="act">${i.connected
+      ? `<span class="badge b-ok"><span class="dot"></span>Connected</span><button class="btn btn-ghost btn-sm" onclick="toggleIntg('${i.id}')">Remove</button>`
+      : `<button class="btn btn-brand btn-sm" onclick="toggleIntg('${i.id}')"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add</button>`}</div></div>`;
+}
+function renderIntegrations(){
+  const conn=INTEGRATIONS.filter(i=>i.connected), avail=INTEGRATIONS.filter(i=>!i.connected);
+  document.getElementById('intgConnected').innerHTML=conn.map(intgCard).join('')||'<div class="muted" style="padding:12px">No integrations connected.</div>';
+  document.getElementById('intgAvailable').innerHTML=avail.map(intgCard).join('')||'<div class="muted" style="padding:12px">Everything is connected.</div>';
+  const pip=document.querySelector('.nav-i[data-view="integrations"] .pip'); if(pip) pip.textContent=conn.length;
+}
+function toggleIntg(id){const i=INTEGRATIONS.find(x=>x.id===id);i.connected=!i.connected;renderIntegrations();toast(i.connected?`${i.name} connected`:`${i.name} removed`);}
+
+// ── overview feed ─────────────────────────────────────────
+function renderOvFeed(){
+  const ic={Rebalance:['#ECE6FB','#5B45C9','M3 12a9 9 0 0 1 15-6M21 12a9 9 0 0 1-15 6M18 3v3h-3M6 21v-3h3'],
+    Fee:['#FBF1DC','#B8862A','M12 3v18M8 7h6a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6'],
+    Security:['#F8E5DF','#C0492F','M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z'],
+    Client:['#E2F2EA','#138A5E','M4 12l5 5L20 6'],Permission:['#EAE7F3','#5B45C9','M5 12l4 4L19 7']};
+  document.getElementById('ovFeed').innerHTML=AUDIT.slice(0,6).map(a=>{const [bg,fg,p]=ic[a.cat]||ic.Client;return `
+    <div class="feed-i"><span class="feed-ic" style="background:${bg};color:${fg}"><svg viewBox="0 0 24 24" fill="none"><path d="${p}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <div class="feed-b"><div class="tx">${a.event}</div><div class="mt">${a.client} · ${a.actor} · ${a.t}</div></div>
+    <span class="feed-amt"><span class="badge ${auditStatusBadge(a.status)}"><span class="dot"></span>${a.status}</span></span></div>`;}).join('');
+}
+
+// ── modals ────────────────────────────────────────────────
+const MODALS={
+  addClient:{title:'Add a client',sub:'Invite an investor to deploy a non-custodial vault under your brand.',body:`
+    <div class="inp"><label>Client name</label><input placeholder="e.g. The Ashby Family Office"></div>
+    <div class="inp"><label>Client type</label><select><option>Family Office</option><option>Trust</option><option>Individual</option><option>Institutional</option></select></div>
+    <div class="inp"><label>Mandate</label><div class="seg"><button class="on">Conservative</button><button>Balanced</button><button>Aggressive</button></div></div>
+    <div class="inp"><label>Invite email</label><input placeholder="client@email.com"></div>
+    <div class="note"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.7"/></svg>They deploy their own wallet. You never take custody.</div>`,
+    cta:'Send invite',done:'Invite sent, client will deploy their vault'},
+  addMember:{title:'Invite a team member',sub:'Add a colleague with a scoped role.',body:`
+    <div class="inp"><label>Name</label><input placeholder="Full name"></div>
+    <div class="inp"><label>Email</label><input placeholder="name@aureliacap.com"></div>
+    <div class="inp"><label>Role</label><select><option>Portfolio Ops</option><option>Compliance</option><option>Client Advisor (read-only)</option><option>Managing Partner (full)</option></select></div>`,
+    cta:'Send invite',done:'Team invite sent'},
+  customIntegration:{title:'Request a custom integration',sub:'Tell us what to connect, custodian, fund admin, tax tool, or your own internal system.',body:`
+    <div class="inp"><label>Integration name</label><input placeholder="e.g. BNY Mellon, Arch, internal API"></div>
+    <div class="inp"><label>What should it do?</label><input placeholder="e.g. push monthly NAV into our fund admin"></div>
+    <div class="inp"><label>Your email</label><input placeholder="you@aureliacap.com"></div>`,
+    cta:'Send request',done:'Request sent, our team will reach out within 2 business days'},
+};
+function openModal(k){
+  const m=MODALS[k];
+  document.getElementById('modalCard').innerHTML=`
+    <div class="modal-h"><h3>${m.title}</h3><p>${m.sub}</p></div>
+    <div class="modal-b">${m.body}</div>
+    <div class="modal-f"><button class="btn btn-ghost" onclick="closeAll()">Cancel</button><button class="btn btn-brand" onclick="closeAll();toast('${m.done}')">${m.cta}</button></div>`;
+  document.querySelectorAll('#modalCard .seg button').forEach(b=>b.onclick=()=>{b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+  document.getElementById('modal').classList.add('on');
+  document.getElementById('scrim').classList.add('on');
+}
+function closeAll(){
+  document.getElementById('drawer').classList.remove('on');
+  document.getElementById('modal').classList.remove('on');
+  document.getElementById('scrim').classList.remove('on');
+}
+
+// ── branding controls ─────────────────────────────────────
+function setBrand(c){
+  document.documentElement.style.setProperty('--brand',c);
+  // derive soft + ink shades
+  document.documentElement.style.setProperty('--brand-soft',hexA(c,.13));
+  document.documentElement.style.setProperty('--brand-ink',darken(c,.22));
+}
+function setBrandName(v){document.getElementById('brandName').textContent=v||'Aurelia';document.getElementById('brandPrevName').textContent=v||'Aurelia';}
+document.querySelectorAll('#swatches button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#swatches button').forEach(x=>x.classList.remove('on'));b.classList.add('on');setBrand(b.dataset.c);
+});
+function hexA(h,a){const n=parseInt(h.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`;}
+function darken(h,f){const n=parseInt(h.slice(1),16);const r=Math.round((n>>16)*(1-f)),g=Math.round(((n>>8)&255)*(1-f)),b=Math.round((n&255)*(1-f));return `rgb(${r},${g},${b})`;}
+
+// ── toast ─────────────────────────────────────────────────
+function toast(msg){
+  const el=document.createElement('div');el.className='toast';
+  el.innerHTML=`<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{el.style.transition='.3s';el.style.opacity='0';el.style.transform='translateY(10px)';setTimeout(()=>el.remove(),300);},2600);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
+
+// ── init ──────────────────────────────────────────────────
+renderClients();renderReports();renderAudit();renderCompliance();renderTeam();renderIntegrations();renderOvFeed();
+</script>
+</body>
+</html>

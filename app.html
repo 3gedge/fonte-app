@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fonte · Your portfolio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%230E7C66'/%3E%3Cpath d='M16 4.5C16 4.5 7.5 13.5 7.5 20a8.5 8.5 0 0 0 17 0C24.5 13.5 16 4.5 16 4.5Z' fill='white'/%3E%3C/svg%3E" />
+<meta name="description" content="Your Fonte dashboard: live positions, NAV, and allocation across a professionally managed, non-custodial crypto portfolio you control." />
+<!--OG-->
+<meta name="theme-color" content="#0E7C66" />
+<link rel="canonical" href="https://fonte.finance/app" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Fonte" />
+<meta property="og:title" content="Fonte · Your portfolio" />
+<meta property="og:description" content="Your Fonte dashboard: live positions, NAV, and allocation across a professionally managed, non-custodial crypto portfolio you control." />
+<meta property="og:url" content="https://fonte.finance/app" />
+<meta property="og:image" content="https://fonte.finance/assets/og.png?v=20260615" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Fonte. Crypto, on autopilot. Professionally managed, non-custodial crypto portfolios." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@fonte" />
+<meta name="twitter:title" content="Fonte · Your portfolio" />
+<meta name="twitter:description" content="Your Fonte dashboard: live positions, NAV, and allocation across a professionally managed, non-custodial crypto portfolio you control." />
+<meta name="twitter:image" content="https://fonte.finance/assets/og.png?v=20260615" />
+<meta name="twitter:image:alt" content="Fonte. Crypto, on autopilot. Professionally managed, non-custodial crypto portfolios." />
+<!--/OG-->
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ===== app shell ===== */
+  .appbar{position:sticky;top:0;z-index:40;border-bottom:1px solid transparent;transition:border-color .2s,background .2s}
+  .appbar.solid{border-color:var(--line);background:rgba(251,250,246,.72);backdrop-filter:saturate(160%) blur(14px)}
+  .appbar-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .step-pills{display:flex;align-items:center;gap:8px}
+  .step-pill{height:6px;width:30px;border-radius:99px;background:var(--line-2);transition:background .3s,width .3s}
+  .step-pill.done{background:var(--accent-2)}
+  .step-pill.active{background:var(--accent);width:42px}
+  .acct-chip{display:flex;align-items:center;gap:10px;padding:7px 8px 7px 14px;border-radius:999px}
+  .acct-chip .nm{font-weight:600;font-size:14px}
+  .acct-chip .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#0E7C66,#3FA98C)}
+
+  /* ===== screens ===== */
+  .screen{display:none;animation:fade .45s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .center-wrap{max-width:560px;margin:0 auto;padding:56px 24px 80px;text-align:center}
+  .center-wide{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+  h1.app-h{font-family:"Fraunces";font-weight:500;font-size:clamp(30px,5vw,44px);line-height:1.07;letter-spacing:-.02em}
+  .app-sub{color:var(--ink-2);font-size:18px;margin-top:14px;line-height:1.5}
+
+  /* welcome */
+  .welcome-card{padding:44px 38px;border-radius:var(--radius-lg);margin-top:36px}
+  .welcome-illus{width:84px;height:84px;border-radius:24px;background:var(--accent);display:grid;place-items:center;margin:0 auto 26px;box-shadow:0 16px 36px rgba(14,124,102,.3)}
+
+  /* quiz */
+  .quiz-card{padding:40px 38px;border-radius:var(--radius-lg);margin-top:8px;text-align:left}
+  .quiz-q{font-family:"Fraunces";font-weight:500;font-size:27px;line-height:1.15;margin-bottom:28px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:15px;border:1.5px solid var(--line-2);
+    background:rgba(255,255,255,.5);cursor:pointer;transition:border-color .15s,background .15s,transform .12s;font-size:16.5px;font-weight:500}
+  .opt:hover{border-color:var(--accent-2);background:#fff}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt .radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-2);flex-shrink:0;display:grid;place-items:center;transition:border-color .15s}
+  .opt.sel .radio{border-color:var(--accent)}
+  .opt.sel .radio::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--accent)}
+  .quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+  .quiz-count{color:var(--ink-3);font-size:14px;font-weight:600}
+
+  /* result */
+  .res-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent-ink);font-weight:600;font-size:14px;padding:8px 16px;border-radius:999px;margin-bottom:18px}
+  .res-name{font-family:"Fraunces";font-weight:600;font-size:clamp(36px,7vw,56px);color:var(--accent);letter-spacing:-.02em;line-height:1}
+  .res-card{padding:34px;border-radius:var(--radius-lg);margin-top:30px;text-align:left}
+  .res-stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+  .res-stat{flex:1;min-width:140px;background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .res-stat .k{color:var(--ink-3);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  .res-stat .v{font-family:"Fraunces";font-weight:600;font-size:26px;margin-top:4px}
+  .alloc-top{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:6px}
+  .alloc-top .name{font-weight:500;display:flex;align-items:center;gap:8px}
+  .alloc-top .pct{font-weight:600;color:var(--ink-2)}
+  .alloc-bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-bottom:14px}
+  .alloc-fill{height:100%;border-radius:99px}
+
+  /* wallet */
+  .wallet-card{padding:40px 38px;border-radius:var(--radius-lg);margin-top:8px}
+  .key-anim{display:flex;flex-direction:column;gap:10px;margin:22px 0;text-align:left}
+  .key-row{display:flex;align-items:center;gap:13px;padding:15px 18px;border-radius:14px;background:rgba(255,255,255,.5);border:1px solid var(--line);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s}
+  .key-row.show{opacity:1;transform:none}
+  .key-row .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+  .key-row .t{font-weight:600;font-size:15px}
+  .key-row .s{color:var(--ink-3);font-size:13px;margin-top:1px}
+  .key-row .ok{margin-left:auto;color:var(--accent);opacity:0;transition:opacity .3s}
+  .key-row.show .ok{opacity:1}
+  .addr-box{margin-top:8px;background:var(--ink);color:#fff;border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .addr-box .lab{color:#9A9BA2;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .addr-box .val{font-family:ui-monospace,monospace;font-size:15px;margin-top:3px}
+
+  /* fund */
+  .fund-card{padding:38px;border-radius:var(--radius-lg);margin-top:8px;text-align:left}
+  .amt-display{font-family:"Fraunces";font-weight:600;font-size:54px;text-align:center;letter-spacing:-.02em;margin:6px 0 4px}
+  .amt-sub{text-align:center;color:var(--ink-3);font-size:14px;margin-bottom:24px}
+  .amt-presets{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+  .amt-preset{padding:10px 18px;border-radius:999px;border:1.5px solid var(--line-2);background:rgba(255,255,255,.5);cursor:pointer;font-weight:600;font-size:15px;transition:.15s}
+  .amt-preset:hover{border-color:var(--accent-2)}
+  .amt-preset.sel{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  input[type=range]{width:100%;accent-color:var(--accent);height:6px;margin:6px 0 22px}
+  .proj{background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+  .proj .k{color:var(--ink-2);font-size:14px}
+  .proj .v{font-family:"Fraunces";font-weight:600;font-size:24px;color:var(--accent)}
+
+  /* deploying */
+  .deploy-ring{width:96px;height:96px;margin:0 auto 28px;position:relative}
+  .deploy-ring svg{transform:rotate(-90deg)}
+  .deploy-ring .pct{position:absolute;inset:0;display:grid;place-items:center;font-family:"Fraunces";font-weight:600;font-size:24px}
+  .deploy-steps{max-width:380px;margin:30px auto 0;text-align:left;display:flex;flex-direction:column;gap:12px}
+  .dstep{display:flex;align-items:center;gap:12px;color:var(--ink-3);font-size:15.5px;transition:color .3s}
+  .dstep.active{color:var(--ink);font-weight:600}
+  .dstep.done{color:var(--ink-2)}
+  .dstep .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-2);flex-shrink:0;display:grid;place-items:center;transition:.3s}
+  .dstep.done .dot{background:var(--accent);border-color:var(--accent)}
+  .dstep.active .dot{border-color:var(--accent)}
+
+  /* ===== dashboard ===== */
+  /* the dashboard screen is a <section>, which globally gets 96px top/bottom
+     padding, too large a gap under the sticky header. Zero it and let
+     .dash-page own the (tight) spacing. */
+  #s-dashboard{padding:0}
+  .dash-page{max-width:var(--maxw);margin:0 auto;padding:16px 24px 80px}
+  .dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+  .dash-total-lab{color:var(--ink-3);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .dash-total{font-family:"Fraunces";font-weight:600;font-size:clamp(40px,7vw,58px);letter-spacing:-.025em;line-height:1;margin-top:4px}
+  .dash-chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent-ink);font-weight:600;font-size:14.5px;padding:6px 13px;border-radius:999px;margin-top:12px}
+  .dash-actions{display:flex;gap:10px}
+  .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+  @media(max-width:900px){.metric-row{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:620px){.metric-row{grid-template-columns:repeat(2,1fr)}}
+  .metric{padding:18px 20px;border-radius:var(--radius-sm)}
+  .metric .k{color:var(--ink-3);font-size:12.5px;font-weight:600}
+  .metric .v{font-weight:600;font-size:23px;margin-top:5px}
+  .metric .v.pos{color:var(--pos)}
+  .metric .v.neg{color:var(--neg)}
+  .metric .v.flat{color:var(--ink-3)}
+  .metric .sub{color:var(--ink-3);font-size:12.5px;margin-top:3px}
+  .metric .sub.pos{color:var(--pos)}
+  .metric .sub.neg{color:var(--neg)}
+  .dash-cols{display:grid;grid-template-columns:1.6fr 1fr;gap:20px}
+  @media(max-width:880px){.dash-cols{grid-template-columns:1fr}}
+  .panel{border-radius:var(--radius);padding:24px}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .panel-h h3{font-size:16px;font-weight:600}
+  .panel-h .tag{color:var(--ink-3);font-size:13px;font-weight:600}
+  .eq-chart{width:100%;height:180px}
+  .pos-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}
+  .pos-row:last-child{border-bottom:0}
+  .pos-left{display:flex;align-items:center;gap:13px}
+  .pos-ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+  .pos-name{font-weight:600;font-size:15px}
+  .pos-sub{color:var(--ink-3);font-size:12.5px;margin-top:2px}
+  .pos-right{text-align:right}
+  .pos-val{font-weight:600;font-size:15px}
+  .pos-apr{color:var(--pos);font-size:12.5px;font-weight:600;margin-top:2px}
+  .legend{display:flex;flex-direction:column;gap:11px;font-size:14px}
+  .legend .lr{display:flex;align-items:center;justify-content:space-between}
+  .legend .lr .nm{display:flex;align-items:center;gap:9px;color:var(--ink-2)}
+  .legend .lr .pc{font-weight:600}
+  .fee-panel .fbig{font-family:"Fraunces";font-weight:600;font-size:34px;color:var(--ink)}
+  .fee-big-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .fee-pct{color:var(--ink-2);font-weight:600;font-size:13.5px;background:var(--surface-2);padding:4px 10px;border-radius:999px}
+  .fee-line{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .fee-line:last-child{border-bottom:0}
+  .fee-line .k{color:var(--ink-2)}
+  .fee-line .v{font-weight:600}
+  .activity{display:flex;flex-direction:column;gap:2px}
+  .act{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .act:last-child{border-bottom:0}
+  .act .ai{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+  .act .at{font-weight:500;font-size:14.5px}
+  .act .as{color:var(--ink-3);font-size:12.5px;margin-top:1px}
+  .act .av{margin-left:auto;font-weight:600;font-size:14px;color:var(--pos)}
+
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(20,20,25,.4);backdrop-filter:blur(4px);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-bg.show{display:flex}
+  .modal{max-width:440px;width:100%;border-radius:var(--radius-lg);padding:32px;text-align:center}
+  .modal h3{font-family:"Fraunces";font-weight:600;font-size:26px;margin-bottom:10px}
+  .modal p{color:var(--ink-2);font-size:16px;margin-bottom:24px;line-height:1.5}
+
+  /* ===== wallet chip (header, top right) ===== */
+  .acct-chip .wallet-ic{color:var(--accent);display:grid;place-items:center}
+  .acct-chip .nm.mono{font-size:13.5px;font-weight:600;letter-spacing:.01em}
+
+  /* ===== dashboard head additions ===== */
+  .profile-chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent-ink);
+    font-weight:600;font-size:12px;padding:3px 10px 3px 8px;border-radius:999px;margin-left:9px;
+    text-transform:none;letter-spacing:0;vertical-align:middle}
+  .profile-chip .pc-dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .dash-total-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .dtd{display:inline-flex;align-items:baseline;gap:6px;font-weight:600;font-size:19px;color:var(--pos)}
+  .dtd.neg{color:var(--neg)}
+  .dtd.flat{color:var(--ink-3)}
+  .dtd .dtd-lab{color:var(--ink-3);font-weight:500;font-size:13.5px}
+  .dash-status{display:flex;align-items:center;gap:7px;color:var(--ink-2);font-size:13.5px;margin-top:13px;font-weight:500}
+  .dash-status .sep{color:var(--ink-3)}
+  .dash-status #dUpdated{color:var(--ink)}
+  .dash-basis{margin-top:9px;color:var(--ink-2);font-size:13.5px;font-weight:500}
+  .dash-basis b{color:var(--ink);font-weight:600;margin-left:3px}
+  .dash-basis .bsep{color:var(--ink-3);margin:0 8px}
+  .at-pnl{font-weight:600}
+  .at-pnl.pos{color:var(--pos)}
+  .at-pnl.neg{color:var(--neg)}
+  .at-pnl.flat{color:var(--ink-3)}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--pos);box-shadow:0 0 0 0 rgba(19,138,94,.5);animation:livepulse 2.2s infinite}
+  @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(19,138,94,.45)}70%{box-shadow:0 0 0 7px rgba(19,138,94,0)}100%{box-shadow:0 0 0 0 rgba(19,138,94,0)}}
+  @media(prefers-reduced-motion:reduce){.live-dot{animation:none}}
+
+  /* ===== sheet flow (deposit / withdraw) ===== */
+  .sheet{max-width:452px;width:100%;border-radius:var(--radius-lg);padding:26px 26px 24px;text-align:left}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:6px}
+  .sheet-head h3{font-family:"Fraunces";font-weight:600;font-size:24px}
+  .sheet-close{width:34px;height:34px;border-radius:50%;border:1px solid var(--line-2);background:rgba(255,255,255,.6);display:grid;place-items:center;cursor:pointer;color:var(--ink-2);flex-shrink:0;transition:.15s}
+  .sheet-close:hover{background:#fff;color:var(--ink)}
+  .sheet-sub{color:var(--ink-2);font-size:15px;margin-bottom:22px;line-height:1.45}
+  .amt-field{position:relative;margin-bottom:14px}
+  .amt-field input{width:100%;font-family:"Fraunces";font-weight:600;font-size:38px;text-align:center;border:1.5px solid var(--line-2);border-radius:16px;padding:18px 64px;background:rgba(255,255,255,.6);color:var(--ink);font-variant-numeric:tabular-nums}
+  .amt-field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .amt-field .cur{position:absolute;left:22px;top:50%;transform:translateY(-50%);font-family:"Fraunces";font-weight:600;font-size:28px;color:var(--ink-3);pointer-events:none}
+  .amt-field .max{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:var(--accent-soft);color:var(--accent-ink);border:none;border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer;min-height:36px}
+  .amt-field .max:hover{background:#d7ece3}
+  .bal-note{text-align:center;color:var(--ink-3);font-size:13.5px;margin:-2px 0 18px}
+  .bal-note b{color:var(--ink-2)}
+  .field-err{color:var(--neg);font-size:13.5px;margin:-4px 0 14px;text-align:center;font-weight:500}
+  .field-lab{font-size:13px;font-weight:600;color:var(--ink-2);margin:6px 0 8px}
+  .dest-field input{width:100%;font-family:ui-monospace,monospace;font-size:14px;border:1.5px solid var(--line-2);border-radius:13px;padding:14px 16px;background:rgba(255,255,255,.6);color:var(--ink)}
+  .dest-field input:focus{outline:none;border-color:var(--accent)}
+  .addr-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+  .addr-copy .a{font-family:ui-monospace,monospace;font-size:14px;word-break:break-all;line-height:1.4}
+  .copy-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;font-weight:600;font-size:13px;cursor:pointer;color:var(--ink);flex-shrink:0;min-height:38px;transition:.15s}
+  .copy-btn:hover{border-color:var(--accent-2)}
+  .copy-btn.done{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+  .review-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .review-row:last-of-type{border-bottom:0}
+  .review-row .k{color:var(--ink-2)}
+  .review-row .v{font-weight:600}
+  .review-row .v.mono{font-family:ui-monospace,monospace;font-size:13.5px}
+  .success-check{width:74px;height:74px;border-radius:50%;background:var(--accent-soft);display:grid;place-items:center;margin:8px auto 18px;animation:pop .4s ease}
+  @keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  .sheet-note{background:rgba(255,255,255,.5);border:1px solid var(--line);border-radius:13px;padding:14px 16px;font-size:13.5px;color:var(--ink-2);line-height:1.5;margin-bottom:16px;display:flex;gap:10px}
+  .sheet-note svg{color:var(--accent);flex-shrink:0;margin-top:1px}
+  .sheet-foot{display:flex;gap:10px;margin-top:6px}
+  .sheet-foot .btn{flex:1}
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div><div class="orb-3"></div>
+
+<!-- APP BAR -->
+<div class="appbar" id="appbar">
+  <div class="wrap appbar-in">
+    <a class="logo" href="index.html" aria-label="Fonte home">
+      <span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span> Fonte
+    </a>
+    <div class="step-pills" id="stepPills" style="display:none">
+      <div class="step-pill" data-s="1"></div><div class="step-pill" data-s="2"></div>
+      <div class="step-pill" data-s="3"></div><div class="step-pill" data-s="4"></div>
+    </div>
+    <div id="acctChip" class="acct-chip glass" style="display:none" title="Your non-custodial wallet">
+      <span class="wallet-ic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 9.5h13a2 2 0 012 2V13" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="13.5" r="1.1" fill="currentColor"/></svg></span>
+      <span class="nm mono" id="acctWallet">0x…</span><span class="av" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>
+
+<!-- 1. WELCOME -->
+<section class="screen active" id="s-welcome">
+  <div class="center-wrap">
+    <div class="welcome-illus"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></div>
+    <h1 class="app-h serif">Let's build your portfolio.</h1>
+    <p class="app-sub">A few quick questions to understand your comfort with risk. Then we set up your wallet and put your money to work. Takes about two minutes.</p>
+    <div class="welcome-card glass">
+      <button class="btn btn-ink btn-lg btn-block" onclick="App.start()">Get started</button>
+      <div style="margin-top:16px;color:var(--ink-3);font-size:13.5px;display:flex;align-items:center;gap:8px;justify-content:center">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-4z" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        Non-custodial. Your keys never leave you.
+      </div>
+    </div>
+    <p style="margin-top:20px;color:var(--ink-3);font-size:14px">Already have an account? <a href="#" onclick="App.demoLogin();return false" style="color:var(--accent);font-weight:600">See a sample dashboard</a></p>
+  </div>
+</section>
+
+<!-- 2. QUIZ -->
+<section class="screen" id="s-quiz">
+  <div class="center-wide">
+    <div class="quiz-card glass" id="quizCard"></div>
+  </div>
+</section>
+
+<!-- 3. RESULT -->
+<section class="screen" id="s-result">
+  <div class="center-wide" style="text-align:center">
+    <div class="res-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Your match</div>
+    <div class="res-name serif" id="resName">Balanced</div>
+    <p class="app-sub" id="resTagline" style="max-width:40ch;margin-left:auto;margin-right:auto">An 80% BTC/ETH basket held through the bull window and sold near the cycle top, an auto-rebalanced stablecoin LP (msUSD/USDC) in between.</p>
+    <div class="res-card glass" id="resCard"></div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="App.go('quiz')">Retake quiz</button>
+      <button class="btn btn-ink btn-lg" onclick="App.go('wallet')">This feels right, continue</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. WALLET -->
+<section class="screen" id="s-wallet">
+  <div class="center-wrap" style="text-align:left">
+    <div style="text-align:center"><h1 class="app-h serif">Creating your wallet.</h1>
+    <p class="app-sub">A secure, non-custodial smart wallet, in your name. We get permission to manage strategies, never to withdraw.</p></div>
+    <div class="wallet-card glass">
+      <div class="key-anim" id="keyAnim">
+        <div class="key-row" data-i="0"><div class="ic" style="background:var(--accent-soft)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="var(--accent)" stroke-width="1.8"/><path d="M8 10V7a4 4 0 018 0v3" stroke="var(--accent)" stroke-width="1.8"/></svg></div><div><div class="t">Smart wallet created</div><div class="s">Deployed on Base, in your name</div></div><span class="ok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="key-row" data-i="1"><div class="ic" style="background:var(--accent-soft)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="var(--accent)" stroke-width="1.7"/></svg></div><div><div class="t">Manage permission granted</div><div class="s">Buy &amp; sell BTC/ETH, lend &amp; provide liquidity, rebalance</div></div><span class="ok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="key-row" data-i="2"><div class="ic" style="background:rgba(192,73,47,.12)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="var(--neg)" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="t">Withdraw permission</div><div class="s" style="color:var(--neg)">Kept with you only, never granted to Fonte</div></div><span class="ok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+      <div class="addr-box"><div><div class="lab">Your wallet</div><div class="val" id="walletAddr">0x…</div></div>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="#9A9BA2" stroke-width="1.7"/><path d="M5 15V5a2 2 0 012-2h8" stroke="#9A9BA2" stroke-width="1.7"/></svg>
+      </div>
+      <button class="btn btn-ink btn-lg btn-block" id="walletNext" style="margin-top:22px" disabled onclick="App.go('fund')">Continue</button>
+    </div>
+  </div>
+</section>
+
+<!-- 5. FUND -->
+<section class="screen" id="s-fund">
+  <div class="center-wrap" style="text-align:left">
+    <div style="text-align:center"><h1 class="app-h serif">How much to start with?</h1>
+    <p class="app-sub">You can add or withdraw anytime. There is no minimum lock-up.</p></div>
+    <div class="fund-card glass">
+      <div class="amt-display tnum" id="amtDisplay">$5,000</div>
+      <div class="amt-sub">USDC on Base</div>
+      <div class="amt-presets" id="amtPresets">
+        <div class="amt-preset" data-v="1000">$1k</div>
+        <div class="amt-preset sel" data-v="5000">$5k</div>
+        <div class="amt-preset" data-v="10000">$10k</div>
+        <div class="amt-preset" data-v="25000">$25k</div>
+      </div>
+      <input type="range" id="amtRange" min="500" max="50000" step="500" value="5000" />
+      <div class="proj"><div class="k">Projected in one year <span style="color:var(--ink-3)" id="projRate">(at 18% target)</span></div><div class="v tnum" id="projVal">$5,900</div></div>
+      <button class="btn btn-ink btn-lg btn-block" style="margin-top:22px" onclick="App.go('deploying')">Fund &amp; build my portfolio</button>
+      <div style="margin-top:14px;color:var(--ink-3);font-size:13px;text-align:center">This is a prototype. No real funds move.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. DEPLOYING -->
+<section class="screen" id="s-deploying">
+  <div class="center-wrap">
+    <div class="deploy-ring"><svg width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="42" fill="none" stroke="var(--line-2)" stroke-width="7"/><circle id="deployArc" cx="48" cy="48" r="42" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" style="transition:stroke-dashoffset .5s"/></svg><div class="pct" id="deployPct">0%</div></div>
+    <h1 class="app-h serif">Building your portfolio.</h1>
+    <p class="app-sub">Setting up your cycle vault.</p>
+    <div class="deploy-steps" id="deploySteps">
+      <div class="dstep" data-i="0"><div class="dot"></div> Reading the halving-cycle schedule</div>
+      <div class="dstep" data-i="1"><div class="dot"></div> Stable phase, deploying to the msUSD/USDC LP</div>
+      <div class="dstep" data-i="2"><div class="dot"></div> Earning yield until the next cycle entry</div>
+      <div class="dstep" data-i="3"><div class="dot"></div> Setting your high-water mark</div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. DASHBOARD -->
+<section class="screen" id="s-dashboard">
+  <div class="dash-page">
+    <div class="dash-head">
+      <div>
+        <div class="dash-total-lab">Total value <span class="profile-chip" id="dProfile"><span class="pc-dot"></span><span></span></span></div>
+        <div class="dash-total-row">
+          <div class="dash-total tnum" id="dTotal">$5,000.00</div>
+          <div class="dtd" id="dDtd"><span class="dtd-val">+0.00%</span> <span class="dtd-lab">today</span></div>
+        </div>
+        <div class="dash-basis">Book value <b id="dBook" class="tnum">$0</b><span class="bsep">·</span><span id="dAllTime" class="at-pnl tnum flat">+$0 (+0.00%) since inception</span></div>
+        <div class="dash-status"><span class="live-dot" aria-hidden="true"></span> Live <span class="sep">·</span> Updated <span id="dUpdated" class="tnum">just now</span></div>
+      </div>
+      <div class="dash-actions">
+        <button class="btn btn-ghost" onclick="App.openSheet('withdraw')">Withdraw</button>
+        <button class="btn btn-ink" onclick="App.openSheet('deposit')">Add funds</button>
+      </div>
+    </div>
+
+    <div class="metric-row">
+      <div class="metric glass"><div class="k">MTD P&amp;L</div><div class="v tnum" id="mMtd">+0.00%</div><div class="sub tnum" id="mMtdUsd">+$0</div></div>
+      <div class="metric glass"><div class="k">YTD P&amp;L</div><div class="v tnum" id="mYtd">+0.00%</div><div class="sub tnum" id="mYtdUsd">+$0</div></div>
+      <div class="metric glass"><div class="k">Backtested CAGR</div><div class="v pos tnum" id="mYield">128%</div><div class="sub">across halving cycles*</div></div>
+      <div class="metric glass"><div class="k">Calmar</div><div class="v pos" id="mVs">2.1</div><div class="sub">vs 0.8 for HODL</div></div>
+      <div class="metric glass"><div class="k">Worst dip</div><div class="v tnum" id="mDip">55%</div><div class="sub">peak to trough (backtested)</div></div>
+      <div class="metric glass"><div class="k">Fees charged</div><div class="v tnum" id="mFee">$0.00</div><div class="sub">10% above high-water mark</div></div>
+    </div>
+
+    <div class="dash-cols">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="panel glass">
+          <div class="panel-h"><h3>Performance</h3><span class="tag" id="perfTag">since you joined</span></div>
+          <svg class="eq-chart" id="eqChart" viewBox="0 0 600 180" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="panel glass">
+          <div class="panel-h"><h3>Positions</h3><span class="tag">auto-managed</span></div>
+          <div id="posList"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="panel glass">
+          <div class="panel-h"><h3>Allocation</h3></div>
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:18px">
+            <svg width="110" height="110" viewBox="0 0 42 42" id="donut" aria-hidden="true"></svg>
+            <div class="legend" id="legend" style="flex:1"></div>
+          </div>
+        </div>
+        <div class="panel glass fee-panel">
+          <div class="panel-h"><h3>Fees</h3><span class="tag">high-water mark</span></div>
+          <div class="fee-big-row"><div class="fbig tnum" id="feeBig">$0.00</div><span class="fee-pct tnum" id="feePct">0.00% of AUM</span></div>
+          <div style="color:var(--ink-3);font-size:13px;margin:2px 0 16px">charged this year</div>
+          <div class="fee-line"><span class="k">Lending yield fee (10%)</span><span class="v tnum" id="feeYield">$0.00</span></div>
+          <div class="fee-line"><span class="k">Cycle gains fee, BTC/ETH (10%)</span><span class="v tnum" id="feeSwing">$0.00</span></div>
+          <div class="fee-line"><span class="k">Management fee</span><span class="v" style="color:var(--pos)">$0 always</span></div>
+        </div>
+        <div class="panel glass">
+          <div class="panel-h"><h3>Recent activity</h3></div>
+          <div class="activity" id="activity"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)App.closeModal()">
+  <div class="sheet glass-strong glass" id="modalBox" role="dialog" aria-modal="true"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

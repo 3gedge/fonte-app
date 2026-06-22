@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="talentapp:project_verification" content="115d5d5af732040dc556b4b8e1f194f7ee761c6c503b8fe507c9de07924be262e8631937c6f5456c04cfb82f3e643b42666dac08f60c0213e851d8ed51836045" />
+<title>Fonte · Crypto, on autopilot</title>
+<meta name="description" content="Professionally managed crypto portfolios. You keep your keys. We do the hard part. You watch it grow." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%230E7C66'/%3E%3Cpath d='M16 4.5C16 4.5 7.5 13.5 7.5 20a8.5 8.5 0 0 0 17 0C24.5 13.5 16 4.5 16 4.5Z' fill='white'/%3E%3C/svg%3E" />
+<!--OG-->
+<meta name="theme-color" content="#0E7C66" />
+<link rel="canonical" href="https://fonte.finance/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Fonte" />
+<meta property="og:title" content="Fonte · Crypto, on autopilot" />
+<meta property="og:description" content="Professionally managed crypto portfolios. You keep your keys. We do the hard part. You watch it grow." />
+<meta property="og:url" content="https://fonte.finance/" />
+<meta property="og:image" content="https://fonte.finance/assets/og.png?v=20260615" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Fonte. Crypto, on autopilot. Professionally managed, non-custodial crypto portfolios." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@fonte" />
+<meta name="twitter:title" content="Fonte · Crypto, on autopilot" />
+<meta name="twitter:description" content="Professionally managed crypto portfolios. You keep your keys. We do the hard part. You watch it grow." />
+<meta name="twitter:image" content="https://fonte.finance/assets/og.png?v=20260615" />
+<meta name="twitter:image:alt" content="Fonte. Crypto, on autopilot. Professionally managed, non-custodial crypto portfolios." />
+<!--/OG-->
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* landing-only */
+  .hero{padding:84px 0 76px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  @media(max-width:920px){.hero-grid{grid-template-columns:1fr;gap:40px}}
+  h1.hero-h{font-family:"Fraunces";font-weight:500;font-size:clamp(40px,6.4vw,68px);line-height:1.02;letter-spacing:-.025em}
+  h1.hero-h em{font-style:italic;color:var(--accent)}
+  .hero-sub{font-size:20px;color:var(--ink-2);margin:24px 0 32px;max-width:30ch;line-height:1.5}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .hero-fine{margin-top:20px;color:var(--ink-3);font-size:14.5px;display:flex;align-items:center;gap:8px}
+
+  .pcard{border-radius:var(--radius);overflow:hidden}
+  .pcard-top{padding:24px 26px 0}
+  .pcard-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .pcard-label{color:var(--ink-3);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .pcard-val{font-family:"Fraunces";font-weight:600;font-size:43px;letter-spacing:-.02em;margin-top:4px}
+  .chip{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:13.5px;padding:5px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+  .chip svg{flex-shrink:0}
+  .chip.up{background:var(--accent-soft);color:var(--accent-ink)}
+  .spark{height:90px;margin:18px 0 4px;width:100%}
+  .pcard-foot{border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface-2)}
+  .pcard-foot > div{padding:16px 18px}
+  .pcard-foot .k{color:var(--ink-3);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .pcard-foot .v{font-weight:700;font-size:16px;margin-top:6px;color:var(--ink);line-height:1.2}
+  /* small screens: the 3-col footer cramps long labels (e.g. "Yield (LP + lending)"
+     wrapped to 5 lines), stack as label↔value rows instead */
+  @media(max-width:520px){
+    .pcard-foot{grid-template-columns:1fr}
+    .pcard-foot > div{display:flex;align-items:center;justify-content:space-between;gap:12px;border-right:0;border-bottom:1px solid var(--line);padding:13px 22px}
+    .pcard-foot > div:last-child{border-bottom:0}
+    .pcard-foot .k{padding:0;border:0;font-size:13px}
+    .pcard-foot .v{padding:0;border:0;margin-top:0;font-size:16px;white-space:nowrap}
+  }
+
+  .trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.45);backdrop-filter:blur(8px)}
+  .trust .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:24px;padding-bottom:24px;flex-wrap:wrap}
+  .trust-item{display:flex;align-items:center;gap:10px;color:var(--ink-2);font-weight:500;font-size:15px}
+  .trust-item svg{color:var(--accent);flex-shrink:0}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:880px){.steps{grid-template-columns:1fr}}
+  .step{border-radius:var(--radius);padding:30px 28px;transition:transform .2s,box-shadow .2s}
+  .step:hover{transform:translateY(-3px)}
+  .step .num{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-family:"Fraunces";font-weight:600;font-size:19px;color:var(--accent);margin-bottom:20px}
+  .step h3{font-size:20px;font-weight:600;margin-bottom:9px}
+  .step p{color:var(--ink-2);font-size:16px;line-height:1.5}
+
+  #profiles .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  @media(max-width:980px){#profiles .profiles{grid-template-columns:1fr;max-width:460px;margin:0 auto}}
+  .pf{border-radius:var(--radius);padding:30px 28px;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;cursor:pointer}
+  .pf:hover{transform:translateY(-3px)}
+  .pf.featured{border:1px solid transparent;box-shadow:0 0 22px rgba(14,124,102,.30),0 0 54px rgba(14,124,102,.19),0 0 96px rgba(14,124,102,.11),0 14px 40px rgba(20,40,33,.10)}
+  .pf.featured:hover{box-shadow:0 0 30px rgba(14,124,102,.42),0 0 68px rgba(14,124,102,.26),0 0 118px rgba(14,124,102,.15),0 18px 46px rgba(20,40,33,.12)}
+  .pf-badge{align-self:flex-start;background:var(--accent);color:#fff;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;letter-spacing:.03em;margin-bottom:16px;text-transform:uppercase}
+  .pf-name{font-family:"Fraunces";font-weight:600;font-size:26px}
+  .pf-target{display:flex;align-items:baseline;gap:7px;margin:14px 0 4px}
+  .pf-target .big{font-family:"Fraunces";font-weight:600;font-size:40px;color:var(--accent);letter-spacing:-.02em}
+  .pf-target .unit{color:var(--ink-2);font-weight:500;font-size:15px}
+  .pf-note{color:var(--ink-3);font-size:13.5px;margin-bottom:22px}
+  .pf-dd{font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:7px;margin-bottom:22px}
+  .pf-dd b{color:var(--ink)}
+  .pf-bear{font-size:12.5px;color:var(--accent-ink);background:var(--accent-soft);border-radius:10px;padding:8px 11px;display:flex;align-items:center;gap:7px;margin:14px 0 4px}
+  .pf-bear b{color:var(--accent-ink)}
+  .pf-bear svg{flex-shrink:0}
+  .alloc{display:flex;flex-direction:column;gap:13px;margin-bottom:24px;flex:1}
+  .alloc-top{display:flex;justify-content:space-between;font-size:14px}
+  .alloc-top .name{color:var(--ink);font-weight:500;display:flex;align-items:center;gap:8px}
+  .alloc-top .pct{color:var(--ink-2);font-weight:600}
+  .alloc-bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px}
+  .alloc-fill{height:100%;border-radius:99px}
+  .pf .btn{width:100%}
+  .pf-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 18px}
+  .pf-stat{background:var(--surface-2);border-radius:12px;padding:10px 13px}
+  .pf-stat .ps-l{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--ink-3);font-weight:600}
+  .pf-stat .ps-l svg{width:12px;height:12px}
+  .pf-stat .ps-v{display:block;font-family:"Fraunces";font-weight:600;font-size:19px;margin-top:3px;color:var(--ink);letter-spacing:-.01em}
+  .pf-stat .ps-v.pos{color:var(--pos)}
+  .alloc-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-top:6px}
+  .alloc-h svg{width:13px;height:13px;opacity:.85}
+  .alloc-h:first-child{margin-top:0}
+
+  #dash{background:var(--ink);color:#fff;border-radius:0}
+  #dash .sec-tag{color:#7FD9C3}
+  #dash h2{color:#fff}
+  #dash .sec-head p{color:#B7B7BC}
+  .dash-shell{background:rgba(36,37,43,.7);backdrop-filter:blur(16px);border:1px solid #34353C;border-radius:24px;box-shadow:0 40px 90px rgba(0,0,0,.5);overflow:hidden}
+  .dash-bar{display:flex;align-items:center;gap:8px;padding:15px 20px;border-bottom:1px solid #34353C}
+  .dash-bar .dots{display:flex;gap:7px}
+  .dash-bar .dots i{width:11px;height:11px;border-radius:50%;background:#3A3B42;display:block}
+  .dash-bar .addr{margin-left:auto;color:#8A8B92;font-size:13px}
+  .dash-body{padding:26px}
+  .dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px}
+  @media(max-width:880px){.dash-grid{grid-template-columns:1fr}}
+  .dval{font-family:"Fraunces";font-weight:600;font-size:46px;letter-spacing:-.02em;color:#fff}
+  .dlabel{color:#8A8B92;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .dchip{display:inline-flex;align-items:center;gap:6px;background:rgba(127,217,195,.13);color:#7FD9C3;font-weight:600;font-size:14px;padding:6px 12px;border-radius:999px;margin-top:10px}
+  .dmetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  .dmetric{background:rgba(22,23,27,.6);border:1px solid #34353C;border-radius:14px;padding:16px}
+  .dmetric .k{color:#8A8B92;font-size:12px;font-weight:600}
+  .dmetric .v{font-weight:600;font-size:21px;margin-top:5px}
+  .dmetric .v.pos{color:#7FD9C3}
+  .dpos-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid #34353C}
+  .dpos-row:last-child{border-bottom:0}
+  .dpos-left{display:flex;align-items:center;gap:12px}
+  .dpos-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff}
+  .dpos-name{font-weight:600;font-size:15px}
+  .dpos-sub{color:#8A8B92;font-size:12.5px;margin-top:2px}
+  .dpos-right{text-align:right}
+  .dpos-val{font-weight:600;font-size:15px}
+  .dpos-apr{color:#7FD9C3;font-size:12.5px;font-weight:600;margin-top:2px}
+  .donut-wrap{display:flex;align-items:center;gap:22px}
+  /* sample-dashboard mockup: adapt card text for mobile */
+  @media(max-width:560px){
+    .dash-body{padding:18px}
+    .dval{font-size:33px}
+    .dchip{font-size:12px;padding:6px 11px}
+    .dmetrics{grid-template-columns:1fr;gap:9px;margin-top:18px}
+    .dmetric{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px}
+    .dmetric .v{font-size:16px;margin-top:0;text-align:right}
+    .dpos-ic{width:32px;height:32px}
+    .dpos-name{font-size:14px}
+    .dpos-sub{font-size:11.5px}
+    .dpos-val{font-size:14px}
+    .donut-wrap{flex-direction:column;align-items:flex-start;gap:14px}
+  }
+
+  .fee-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:880px){.fee-grid{grid-template-columns:1fr;gap:36px}}
+  .fee-card{border-radius:var(--radius);padding:34px}
+  .fee-big{font-family:"Fraunces";font-weight:600;font-size:60px;color:var(--accent);letter-spacing:-.02em;line-height:1}
+  .fee-list{list-style:none;display:flex;flex-direction:column;gap:18px;margin-top:8px}
+  .fee-list li{display:flex;gap:13px;align-items:flex-start}
+  .fee-list .tick{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0;margin-top:2px}
+  .fee-list b{font-weight:600}
+  .fee-list span{color:var(--ink-2);font-size:15.5px;display:block;margin-top:2px}
+  .hwm{margin-top:26px;background:rgba(255,255,255,.5);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 20px;font-size:15px;color:var(--ink-2);backdrop-filter:blur(8px)}
+  .hwm b{color:var(--ink)}
+
+  #safe{background:rgba(255,255,255,.4);backdrop-filter:blur(8px)}
+  .safe-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media(max-width:880px){.safe-grid{grid-template-columns:1fr}}
+  /* ── Hero urgency (Oct entry countdown) ── */
+  .hero-urgency{margin-top:18px;display:flex;align-items:flex-start;gap:11px;background:var(--accent-soft);border:1px solid rgba(14,124,102,.22);border-radius:14px;padding:12px 16px;max-width:46ch;font-size:14px;line-height:1.5;color:var(--ink-2)}
+  .hero-urgency b{color:var(--accent-ink);font-weight:700}
+  .hu-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0;animation:huPulse 2.4s ease-in-out infinite}
+  @keyframes huPulse{0%,100%{box-shadow:0 0 0 3px rgba(14,124,102,.20)}50%{box-shadow:0 0 0 7px rgba(14,124,102,.04)}}
+  @media(prefers-reduced-motion:reduce){.hu-dot{animation:none}}
+  /* ── Net-return calculator ── */
+  #calc{padding:58px 0 84px;background:var(--surface-2)}
+  .calc-wrap{max-width:780px;margin:0 auto}
+  .calc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-top:26px}
+  .calc-controls{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;align-items:start}
+  @media(max-width:680px){.calc-controls{grid-template-columns:1fr;gap:18px}}
+  .calc-field label{display:block;font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:9px}
+  .calc-input-wrap{position:relative;display:flex;align-items:center}
+  .calc-input-wrap .cur{position:absolute;left:15px;font-size:21px;color:var(--ink-3);font-weight:600;pointer-events:none}
+  #calcAmt{width:100%;height:54px;padding:0 14px 0 32px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+  #calcAmt:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,124,102,.15)}
+  .calc-presets{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .calc-preset{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;font-variant-numeric:tabular-nums}
+  .calc-preset:hover{border-color:var(--accent);color:var(--accent-ink)}
+  .calc-profiles{display:flex;gap:8px;flex-wrap:wrap}
+  .calc-prof{flex:1;min-width:92px;min-height:46px;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:14px;color:var(--ink-2);display:flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap;transition:border-color .15s,background .15s,color .15s}
+  .calc-prof:hover{border-color:var(--accent)}
+  .calc-prof[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+  .calc-out{margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:680px){.calc-out{grid-template-columns:1fr}}
+  .calc-tile{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .calc-tile .t-label{font-size:11.5px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+  .calc-tile .t-val{font-family:"Fraunces";font-weight:600;font-size:26px;margin-top:7px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
+  .calc-tile .t-sub{font-size:12px;color:var(--ink-3);margin-top:7px;line-height:1.45}
+  .calc-tile.accent{border-color:rgba(14,124,102,.32);background:var(--accent-soft)}
+  .calc-tile.accent .t-val{color:var(--accent-ink)}
+  .calc-disc{margin-top:16px;font-size:12px;color:var(--ink-3);line-height:1.55}
+  .calc-cta{margin-top:22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .calc-cta-btn{display:inline-flex;align-items:center;gap:8px}
+  .calc-cta-btn svg{transition:transform .2s}
+  .calc-cta-btn:hover svg{transform:translateX(3px)}
+  .calc-cta-note{display:inline-flex;align-items:center;gap:7px;color:var(--ink-2);font-size:13.5px;font-weight:500}
+  .calc-cta-note svg{color:var(--accent);flex-shrink:0}
+  @media(max-width:680px){.calc-cta{flex-direction:column;align-items:stretch}.calc-cta-btn{justify-content:center}.calc-cta-note{justify-content:center}}
+  .safe-feats{display:flex;flex-direction:column;gap:8px;margin-top:28px}
+  .safe-feat{display:flex;gap:15px;padding:18px;border-radius:14px;transition:background .2s}
+  .safe-feat:hover{background:rgba(255,255,255,.6)}
+  .safe-feat .ic{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex-shrink:0}
+  .safe-feat h4{font-size:17px;font-weight:600;margin-bottom:3px}
+  .safe-feat p{color:var(--ink-2);font-size:15px;line-height:1.45}
+  .safe-visual{background:var(--ink);border-radius:22px;padding:40px;color:#fff;min-height:340px;display:flex;flex-direction:column;justify-content:center}
+  .keyline{display:flex;align-items:center;gap:14px;margin:14px 0}
+  .keyline .kic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
+  .keyline .kt{font-weight:600;font-size:15px}
+  .keyline .ks{color:#9A9BA2;font-size:13px;margin-top:1px}
+  .keyflow{height:1px;background:linear-gradient(90deg,transparent,#3A3B42,transparent);margin:6px 0 6px 54px}
+
+  .faq{max-width:760px;margin:0 auto}
+  .q{border-bottom:1px solid var(--line)}
+  .q-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;background:none;border:none;cursor:pointer;text-align:left;font-family:inherit;font-size:19px;font-weight:600;color:var(--ink)}
+  .q-btn .chev{flex-shrink:0;transition:transform .25s;color:var(--ink-3)}
+  .q.open .chev{transform:rotate(180deg)}
+  .q-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .q-body p{color:var(--ink-2);font-size:16.5px;line-height:1.6;padding-bottom:24px;max-width:64ch}
+
+  #cta{background:var(--accent);color:#fff;text-align:center}
+  #cta h2{color:#fff;max-width:18ch;margin:0 auto}
+  #cta p{color:rgba(255,255,255,.86);font-size:19px;margin:18px auto 32px;max-width:46ch}
+  #cta .btn-ink{background:#fff;color:var(--accent-ink)}
+
+  footer{border-top:1px solid var(--line);padding:56px 0 40px}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:40px}
+  .foot-brand{max-width:280px}
+  .foot-brand p{color:var(--ink-2);font-size:14.5px;margin-top:14px;line-height:1.5}
+  .foot-cols{display:flex;gap:60px;flex-wrap:wrap}
+  .foot-col h5{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:14px;font-weight:600}
+  .foot-col a{display:block;color:var(--ink-2);font-size:15px;margin-bottom:10px;transition:color .15s}
+  .foot-col a:hover{color:var(--ink)}
+  .foot-legal{border-top:1px solid var(--line);padding-top:26px;color:var(--ink-3);font-size:13px;line-height:1.6;max-width:90ch}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:22px;flex-wrap:wrap;color:var(--ink-3);font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div><div class="orb-3"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#top" aria-label="Fonte home">
+      <span class="mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span>
+      Fonte
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#calc">Returns</a>
+      <a href="#fees">Pricing</a>
+      <a href="#safe">Security</a>
+      <a href="business.html">For funds</a>
+    </div>
+    <div class="nav-cta">
+      <a href="https://app.fonte.finance/?connect=1" class="btn btn-ghost">Connect</a>
+      <a href="https://app.fonte.finance/onboarding" class="btn btn-ink">Start now</a>
+    </div>
+  </div>
+</nav>
+<span id="top"></span>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <h1 class="hero-h serif">Your crypto,<br>on <em>autopilot.</em></h1>
+      <p class="hero-sub">We hold a BTC &amp; ETH basket through each market cycle and rotate into an auto-rebalanced stablecoin LP in the bear, automatically. You keep your keys. We do the hard part.</p>
+      <div class="hero-cta">
+        <a href="https://app.fonte.finance/onboarding" class="btn btn-ink btn-lg">Start now</a>
+        <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+      </div>
+      <div class="hero-urgency">
+        <span class="hu-dot" aria-hidden="true"></span>
+        <span><b id="huWeeks">~17 weeks</b> until the next cycle entry (~Oct&nbsp;19, 2026). Be in place before we deploy and earn <b>~17% LP yield</b> until then. Buying in is the easy part; we hold through the dip and time the exit so you do not have to.</span>
+      </div>
+      <div class="hero-fine">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Non-custodial. We never hold your funds. Withdraw anytime.
+      </div>
+    </div>
+
+    <div class="pcard glass reveal in" aria-hidden="true">
+      <div class="pcard-top">
+        <div class="pcard-row">
+          <div>
+            <div class="pcard-label">Portfolio value</div>
+            <div class="pcard-val tnum">$24,318<span style="font-size:24px;color:var(--ink-3)">.40</span></div>
+          </div>
+          <span class="chip up">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v6m0 0 3-3m-3 3L9 6M5 12h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Stable phase &middot; earning LP yield
+          </span>
+        </div>
+        <svg class="spark" viewBox="0 0 320 90" preserveAspectRatio="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E7C66" stop-opacity=".18"/><stop offset="1" stop-color="#0E7C66" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,80 C26,79 40,55 60,52 C84,48 96,30 120,26 C150,21 168,12 196,16 C220,19 236,40 264,44 C288,47 300,42 320,40" fill="none" stroke="#0E7C66" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M0,80 C26,79 40,55 60,52 C84,48 96,30 120,26 C150,21 168,12 196,16 C220,19 236,40 264,44 C288,47 300,42 320,40 L320,90 L0,90 Z" fill="url(#g)"/>
+        </svg>
+      </div>
+      <div class="pcard-foot">
+        <div><div class="k">Strategy</div><div class="v">BTC / ETH cycle</div></div>
+        <div><div class="k">Risk profile</div><div class="v">Balanced</div></div>
+        <div><div class="k">Phase now</div><div class="v" style="color:var(--accent-ink)">Stablecoin LP</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRUST STRIP -->
+<div class="trust">
+  <div class="wrap">
+    <div class="trust-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/></svg> You keep custody</div>
+    <div class="trust-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.7"/></svg> Audited protocols only</div>
+    <div class="trust-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Withdraw anytime</div>
+    <div class="trust-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 3 8-8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 7h4v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> We only earn when you do</div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">How it works</div>
+      <h2 class="serif">Three steps, then you can forget about it.</h2>
+      <p>No spreadsheets, no charts at 2am. Pick how much risk feels right, and we handle the rest.</p>
+    </div>
+    <div class="steps">
+      <div class="step glass reveal"><div class="num">1</div><h3>Choose your comfort level</h3><p>Answer a few plain questions. We match you to Conservative, Balanced, or Aggressive, each built for a different appetite for ups and downs.</p></div>
+      <div class="step glass reveal"><div class="num">2</div><h3>We create your wallet</h3><p>A secure, non-custodial wallet is set up in your name. Your keys stay yours. We get permission to manage strategies, never to withdraw.</p></div>
+      <div class="step glass reveal"><div class="num">3</div><h3>Your money rides the cycle</h3><p>We buy a BTC &amp; ETH basket in the post-halving bull market, rotate into an auto-rebalanced stablecoin LP near the top, then earn yield through the bear, automatically, on a rules-based schedule. You watch it work.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILES -->
+<section id="profiles">
+  <div class="wrap">
+    <div class="sec-head reveal" style="max-width:640px">
+      <div class="sec-tag">Portfolios</div>
+      <h2 class="serif">One of these will feel like you.</h2>
+      <p>Every portfolio runs the same engine: a 50/50 BTC&nbsp;&amp;&nbsp;ETH basket held through the post-halving bull market, with the cash cushion earning msUSD/USDC LP yield and topping up the basket on deep dips, then a 100% auto-rebalanced stablecoin LP in the bear. How much you hold in the basket is what changes.</p>
+    </div>
+    <div class="profiles">
+      <div class="pf glass reveal" tabindex="0" onclick="location.href='https://app.fonte.finance/onboarding'">
+        <span class="pf-name serif">Conservative</span>
+        <div class="pf-target"><span class="big tnum">~116%</span><span class="unit">cycle CAGR*</span></div>
+        <div class="pf-stats">
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 8l5 7 4-4 7 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Worst dip</span><span class="ps-v">&minus;55%</span></div>
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 16l5-5 4 3 7-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>LP yield adds</span><span class="ps-v pos">+12%</span></div>
+        </div>
+        <div class="pf-note">BTC &amp; ETH through the bull, a stablecoin LP in the bear.</div>
+        <div class="alloc">
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>In the bull</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#1B1C20"></span>BTC / ETH basket</span><span class="pct">60%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:60%;background:#1B1C20"></div></div></div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#0E7C66"></span>msUSD/USDC LP cushion</span><span class="pct">40%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:40%;background:#0E7C66"></div></div></div>
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><path d="M20 14a8 8 0 1 1-10-10 7 7 0 0 0 10 10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>In the bear</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#3FA98C"></span>Stablecoin LP (msUSD/USDC)</span><span class="pct">100%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:100%;background:#3FA98C"></div></div></div>
+        </div>
+        <button class="btn btn-ghost" onclick="event.stopPropagation();location.href='https://app.fonte.finance/onboarding'">Start now</button>
+      </div>
+
+      <div class="pf featured glass-strong glass reveal" tabindex="0" onclick="location.href='https://app.fonte.finance/onboarding'">
+        <span class="pf-badge">Most popular</span>
+        <span class="pf-name serif">Balanced</span>
+        <div class="pf-target"><span class="big tnum">~128%</span><span class="unit">cycle CAGR*</span></div>
+        <div class="pf-stats">
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 8l5 7 4-4 7 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Worst dip</span><span class="ps-v">&minus;60%</span></div>
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 16l5-5 4 3 7-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>LP yield adds</span><span class="ps-v pos">+9%</span></div>
+        </div>
+        <div class="pf-note">Hold the cycle, exit near the top.</div>
+        <div class="alloc">
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>In the bull</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#1B1C20"></span>BTC / ETH basket</span><span class="pct">80%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:80%;background:#1B1C20"></div></div></div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#0E7C66"></span>msUSD/USDC LP cushion</span><span class="pct">20%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:20%;background:#0E7C66"></div></div></div>
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><path d="M20 14a8 8 0 1 1-10-10 7 7 0 0 0 10 10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>In the bear</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#3FA98C"></span>Stablecoin LP (msUSD/USDC)</span><span class="pct">100%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:100%;background:#3FA98C"></div></div></div>
+        </div>
+        <button class="btn btn-accent" onclick="event.stopPropagation();location.href='https://app.fonte.finance/onboarding'">Start now</button>
+      </div>
+
+      <div class="pf glass reveal" tabindex="0" onclick="location.href='https://app.fonte.finance/onboarding'">
+        <span class="pf-name serif">Aggressive</span>
+        <div class="pf-target"><span class="big tnum">~139%</span><span class="unit">cycle CAGR*</span></div>
+        <div class="pf-stats">
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 8l5 7 4-4 7 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Worst dip</span><span class="ps-v">&minus;65%</span></div>
+          <div class="pf-stat"><span class="ps-l"><svg viewBox="0 0 24 24" fill="none"><path d="M4 16l5-5 4 3 7-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>LP yield adds</span><span class="ps-v pos">+7%</span></div>
+        </div>
+        <div class="pf-note">Full basket, full cycle.</div>
+        <div class="alloc">
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>In the bull</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#1B1C20"></span>BTC / ETH basket</span><span class="pct">100%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:100%;background:#1B1C20"></div></div></div>
+          <div class="alloc-h"><svg viewBox="0 0 24 24" fill="none"><path d="M20 14a8 8 0 1 1-10-10 7 7 0 0 0 10 10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>In the bear</div>
+          <div><div class="alloc-top"><span class="name"><span class="swatch" style="background:#3FA98C"></span>Stablecoin LP (msUSD/USDC)</span><span class="pct">100%</span></div><div class="alloc-bar"><div class="alloc-fill" style="width:100%;background:#3FA98C"></div></div></div>
+        </div>
+        <button class="btn btn-ghost" onclick="event.stopPropagation();location.href='https://app.fonte.finance/onboarding'">Start now</button>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--ink-3);font-size:13.5px;margin-top:28px;max-width:70ch;margin-left:auto;margin-right:auto">*Backtested halving-cycle CAGR (BTC since 2011 / ETH since 2016), fit to 2–3 cycles, not a forward promise. Combines the bull basket return with the bear-phase stablecoin-LP yield (modeled at ~17% net from the msUSD/USDC pool's recent mature-TVL emissions; LP yield is variable and depends on emissions and the pegs holding). Returns are lumpy: the basket is held only during the ~18-month post-halving bull window, then a 100% auto-rebalanced stablecoin LP (msUSD/USDC on Aerodrome). <b>Vaults are currently in the stable phase until the next entry (~Oct 2026).</b> Crypto can fall hard and fast. Each profile shows its real worst-case drawdown. Not financial advice.</p>
+  </div>
+</section>
+
+<!-- BACKTEST / PROOF -->
+<section id="proof">
+  <div class="wrap">
+    <div class="sec-head reveal" style="max-width:700px">
+      <div class="sec-tag">The backtest</div>
+      <h2 class="serif">Three halving cycles. One simple rule.</h2>
+      <p>We replayed the exact rule on <b>real BTC prices since 2011 and ETH since 2016</b>: hold a 50/50 BTC&nbsp;&amp;&nbsp;ETH basket through the post-halving bull, step aside into the msUSD/USDC stablecoin LP near the top, earn its yield through the bear. Net of the 10% fee. Bull returns are from real prices; the bear LP yield is modeled from the pool's recent (mature-TVL) emissions (~17% net). The chart starts at the strategy's first entry (2015).</p>
+    </div>
+
+    <div class="bt-stats reveal">
+      <div class="bt-stat"><div class="bt-k">Risk-adjusted return</div><div class="bt-v tnum">1.7&ndash;2.0</div><div class="bt-sub">Calmar &middot; vs <b>0.8</b> for buy-and-hold</div></div>
+      <div class="bt-stat"><div class="bt-k">Worst drawdown</div><div class="bt-v tnum">&minus;44%</div><div class="bt-sub">Conservative &middot; vs <b>&minus;88%</b> holding 50/50</div></div>
+      <div class="bt-stat"><div class="bt-k">Halving cycles tested</div><div class="bt-v tnum">3</div><div class="bt-sub">2015 &middot; 2019 &middot; 2022 entries</div></div>
+    </div>
+
+    <div class="bt-chart glass reveal">
+      <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Backtested No-TP Hold cycle strategy vs buy-and-hold, log scale" style="width:100%;height:auto;display:block;font-family:ui-sans-serif,system-ui,sans-serif">
+<line x1="60" y1="344.0" x2="742" y2="344.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="347.0" text-anchor="end" font-size="10.5" fill="#8C8C93">0.1×</text>
+<line x1="60" y1="280.0" x2="742" y2="280.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="283.0" text-anchor="end" font-size="10.5" fill="#8C8C93">1×</text>
+<line x1="60" y1="216.0" x2="742" y2="216.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="219.0" text-anchor="end" font-size="10.5" fill="#8C8C93">10×</text>
+<line x1="60" y1="152.0" x2="742" y2="152.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="155.0" text-anchor="end" font-size="10.5" fill="#8C8C93">100×</text>
+<line x1="60" y1="88.0" x2="742" y2="88.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="91.0" text-anchor="end" font-size="10.5" fill="#8C8C93">1000×</text>
+<line x1="60" y1="24.0" x2="742" y2="24.0" stroke="#ECE9E0" stroke-width="1"/>
+<text x="52" y="27.0" text-anchor="end" font-size="10.5" fill="#8C8C93">10000×</text>
+<text x="60.0" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2015</text>
+<text x="119.7" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2016</text>
+<text x="179.5" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2017</text>
+<text x="239.2" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2018</text>
+<text x="298.9" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2019</text>
+<text x="358.7" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2020</text>
+<text x="418.4" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2021</text>
+<text x="478.2" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2022</text>
+<text x="537.9" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2023</text>
+<text x="597.6" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2024</text>
+<text x="657.4" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2025</text>
+<text x="717.1" y="366" text-anchor="middle" font-size="11" fill="#8C8C93">2026</text>
+<line x1="60" y1="280.0" x2="742" y2="280.0" stroke="#C9C4B6" stroke-width="1.2" stroke-dasharray="2 3"/>
+<polyline points="60.0,280.0 65.0,275.7 70.0,276.7 74.9,277.6 79.9,278.5 84.9,274.7 89.9,272.5 94.8,278.4 99.8,277.6 104.8,270.1 109.8,264.7 114.8,260.9 119.7,265.3 124.7,260.6 129.7,262.0 134.7,259.8 139.6,255.5 144.6,253.1 149.6,254.1 154.6,255.5 159.6,252.7 164.5,253.3 169.5,255.7 174.5,252.5 179.5,248.6 184.5,239.6 189.4,224.0 194.4,213.7 199.4,191.1 204.4,186.8 209.3,188.9 214.3,172.5 219.3,177.2 224.3,171.4 229.3,160.0 234.2,147.0 239.2,145.4 244.2,148.7 249.2,164.9 254.1,153.4 259.1,158.3 264.1,163.9 269.1,161.8 274.1,169.0 279.0,172.3 284.0,175.2 289.0,189.5 294.0,188.1 298.9,192.1 303.9,187.2 308.9,185.4 313.9,180.1 318.9,166.1 323.8,161.7 328.8,166.5 333.8,170.5 338.8,171.7 343.8,170.2 348.7,175.4 353.7,178.4 358.7,170.0 363.7,168.5 368.6,179.2 373.6,168.9 378.6,166.0 383.6,166.8 388.6,157.7 393.5,154.2 398.5,157.7 403.5,153.2 408.5,141.7 413.4,133.7 418.4,123.5 423.4,117.9 428.4,110.0 433.4,105.0 438.3,111.0 443.3,114.2 448.3,110.3 453.3,104.2 458.2,107.0 463.2,97.3 468.2,97.2 473.2,103.3 478.2,110.1 483.1,107.3 488.1,105.0 493.1,110.2 498.1,117.2 503.1,131.9 508.0,123.3 513.0,126.5 518.0,129.0 523.0,125.9 527.9,131.0 532.9,132.6 537.9,124.0 542.9,123.8 547.9,119.1 552.8,118.4 557.8,119.3 562.8,117.3 567.8,118.5 572.7,121.8 577.7,121.0 582.7,116.4 587.7,113.4 592.7,110.4 597.6,110.2 602.6,99.8 607.6,96.4 612.6,101.3 617.5,96.7 622.5,99.0 627.5,99.3 632.5,104.1 637.5,102.6 642.4,101.6 647.4,91.7 652.4,93.6 657.4,92.3 662.4,100.4 667.3,103.5 672.3,101.8 677.3,95.4 682.3,95.3 687.2,88.6 692.2,87.0 697.2,87.1 702.2,88.6 707.2,94.8 712.1,95.3 717.1,99.4 722.1,104.7 727.1,103.5 732.0,100.9 737.0,103.1 742.0,105.9" fill="none" stroke="#9A9AA2" stroke-width="1.6" stroke-dasharray="4 4" stroke-linejoin="round" stroke-linecap="round" opacity="0.7"/>
+<polyline points="60.0,280.0 65.0,278.5 70.0,279.0 74.9,278.8 79.9,278.5 84.9,279.1 89.9,278.5 94.8,280.3 99.8,281.1 104.8,278.8 109.8,278.8 114.8,279.3 119.7,280.8 124.7,280.9 129.7,279.1 134.7,279.0 139.6,278.6 144.6,278.6 149.6,277.6 154.6,277.7 159.6,277.7 164.5,278.2 169.5,277.3 174.5,276.8 179.5,276.3 184.5,275.3 189.4,275.3 194.4,275.0 199.4,274.7 204.4,274.6 209.3,274.1 214.3,274.0 219.3,273.5 224.3,272.9 229.3,272.1 234.2,271.9 239.2,270.3 244.2,271.4 249.2,272.2 254.1,272.1 259.1,271.5 264.1,271.4 269.1,270.4 274.1,269.6 279.0,269.5 284.0,271.5 289.0,271.0 294.0,273.7 298.9,271.5 303.9,270.7 308.9,270.2 313.9,269.2 318.9,271.1 323.8,269.2 328.8,268.8 333.8,269.4 338.8,268.9 343.8,268.3 348.7,267.4 353.7,266.6 358.7,266.6 363.7,269.1 368.6,272.8 373.6,269.5 378.6,268.3 383.6,267.7 388.6,266.3 393.5,264.4 398.5,265.5 403.5,266.3 408.5,263.4 413.4,262.4 418.4,262.7 423.4,262.0 428.4,260.9 433.4,259.4 438.3,259.3 443.3,258.7 448.3,258.0 453.3,257.3 458.2,258.6 463.2,256.7 468.2,257.0 473.2,255.8 478.2,257.3 483.1,258.2 488.1,257.2 493.1,259.8 498.1,259.8 503.1,262.2 508.0,259.8 513.0,261.0 518.0,263.7 523.0,261.6 527.9,260.1 532.9,261.8 537.9,260.1 542.9,260.9 547.9,259.9 552.8,259.5 557.8,259.4 562.8,257.7 567.8,256.8 572.7,257.3 577.7,258.7 582.7,259.3 587.7,257.0 592.7,255.8 597.6,255.3 602.6,253.9 607.6,253.1 612.6,254.3 617.5,253.0 622.5,252.0 627.5,251.7 632.5,251.1 637.5,250.5 642.4,250.8 647.4,249.2 652.4,249.9 657.4,249.2 662.4,249.6 667.3,251.3 672.3,251.5 677.3,249.8 682.3,248.5 687.2,247.9 692.2,247.3 697.2,246.4 702.2,245.8 707.2,245.7 712.1,245.7 717.1,245.4 722.1,245.6 727.1,247.0 732.0,244.3 737.0,242.9 742.0,243.2" fill="none" stroke="#5E7CA0" stroke-width="1.6" stroke-dasharray="1 3" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+<polyline points="60.0,280.0 65.0,279.8 70.0,279.7 74.9,279.5 79.9,279.4 84.9,279.2 89.9,279.1 94.8,278.9 99.8,278.7 104.8,278.6 109.8,278.4 114.8,278.3 119.7,278.1 124.7,278.0 129.7,277.8 134.7,277.6 139.6,277.5 144.6,277.3 149.6,277.2 154.6,277.0 159.6,276.9 164.5,276.7 169.5,276.6 174.5,276.4 179.5,276.2 184.5,276.1 189.4,275.9 194.4,275.8 199.4,275.6 204.4,275.5 209.3,275.3 214.3,275.1 219.3,275.0 224.3,274.8 229.3,274.7 234.2,274.5 239.2,274.4 244.2,274.2 249.2,274.0 254.1,273.9 259.1,273.7 264.1,273.6 269.1,273.4 274.1,273.3 279.0,273.1 284.0,272.9 289.0,272.8 294.0,272.6 298.9,272.5 303.9,272.3 308.9,272.2 313.9,272.0 318.9,271.9 323.8,271.7 328.8,271.5 333.8,271.4 338.8,271.2 343.8,271.1 348.7,270.9 353.7,270.8 358.7,270.6 363.7,270.4 368.6,270.3 373.6,270.1 378.6,270.0 383.6,269.8 388.6,269.7 393.5,269.5 398.5,269.3 403.5,269.2 408.5,269.0 413.4,268.9 418.4,268.7 423.4,268.6 428.4,268.4 433.4,268.2 438.3,268.1 443.3,267.9 448.3,267.8 453.3,267.6 458.2,267.5 463.2,267.3 468.2,267.1 473.2,267.0 478.2,266.8 483.1,266.7 488.1,266.5 493.1,266.4 498.1,266.2 503.1,266.1 508.0,265.9 513.0,265.7 518.0,265.6 523.0,265.4 527.9,265.3 532.9,265.1 537.9,265.0 542.9,264.8 547.9,264.6 552.8,264.5 557.8,264.3 562.8,264.2 567.8,264.0 572.7,263.9 577.7,263.7 582.7,263.5 587.7,263.4 592.7,263.2 597.6,263.1 602.6,262.9 607.6,262.8 612.6,262.6 617.5,262.4 622.5,262.3 627.5,262.1 632.5,262.0 637.5,261.8 642.4,261.7 647.4,261.5 652.4,261.4 657.4,261.2 662.4,261.0 667.3,260.9 672.3,260.7 677.3,260.6 682.3,260.4 687.2,260.3 692.2,260.1 697.2,259.9 702.2,259.8 707.2,259.6 712.1,259.5 717.1,259.3 722.1,259.2 727.1,259.0 732.0,258.8 737.0,258.7 742.0,258.5" fill="none" stroke="#B7AE99" stroke-width="1.4" stroke-dasharray="1 3" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+<polyline points="60.0,280.0 65.0,277.3 70.0,278.7 74.9,276.7 79.9,277.6 84.9,278.6 89.9,273.5 94.8,274.3 99.8,274.6 104.8,278.3 109.8,278.0 114.8,277.1 119.7,278.2 124.7,280.1 129.7,277.0 134.7,277.1 139.6,276.0 144.6,277.8 149.6,277.8 154.6,279.1 159.6,279.0 164.5,274.8 169.5,274.9 174.5,274.4 179.5,273.9 184.5,275.2 189.4,275.8 194.4,275.5 199.4,276.6 204.4,275.3 209.3,285.1 214.3,286.3 219.3,286.5 224.3,285.6 229.3,284.6 234.2,285.8 239.2,284.4 244.2,286.5 249.2,286.3 254.1,286.6 259.1,286.1 264.1,286.5 269.1,286.0 274.1,282.3 279.0,283.9 284.0,286.9 289.0,286.1 294.0,286.5 298.9,286.7 303.9,283.7 308.9,283.2 313.9,282.1 318.9,285.4 323.8,283.3 328.8,284.6 333.8,283.3 338.8,282.4 343.8,281.5 348.7,282.0 353.7,283.5 358.7,281.7 363.7,285.0 368.6,288.7 373.6,286.8 378.6,287.3 383.6,288.7 388.6,287.4 393.5,283.1 398.5,282.0 403.5,279.1 408.5,259.1 413.4,255.6 418.4,242.7 423.4,237.3 428.4,240.1 433.4,241.0 438.3,250.3 443.3,240.7 448.3,242.4 453.3,239.5 458.2,244.6 463.2,238.7 468.2,238.4 473.2,246.2 478.2,257.1 483.1,252.0 488.1,249.4 493.1,258.2 498.1,266.3 503.1,279.5 508.0,264.1 513.0,270.0 518.0,272.4 523.0,266.0 527.9,274.3 532.9,283.7 537.9,267.7 542.9,266.5 547.9,263.5 552.8,260.3 557.8,262.7 562.8,259.1 567.8,252.3 572.7,257.9 577.7,260.3 582.7,253.2 587.7,248.7 592.7,242.1 597.6,248.5 602.6,228.7 607.6,214.5 612.6,227.6 617.5,217.6 622.5,220.4 627.5,216.0 632.5,221.5 637.5,214.8 642.4,204.5 647.4,191.7 652.4,199.8 657.4,195.8 662.4,203.3 667.3,199.9 672.3,192.2 677.3,193.0 682.3,190.5 687.2,190.7 692.2,195.8 697.2,196.8 702.2,201.8 707.2,213.4 712.1,217.7 717.1,218.1 722.1,222.2 727.1,223.2 732.0,215.3 737.0,216.4 742.0,226.1" fill="none" stroke="#C0703E" stroke-width="1.6" stroke-dasharray="1 3" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+<polyline points="60.0,279.6 65.0,279.2 70.0,278.8 74.9,278.5 79.9,279.0 84.9,275.2 89.9,272.9 94.8,278.8 99.8,278.1 104.8,270.5 109.8,265.1 114.8,261.4 119.7,265.7 124.7,261.1 129.7,262.4 134.7,260.3 139.6,255.9 144.6,253.5 149.6,254.6 154.6,255.9 159.6,253.2 164.5,253.8 169.5,256.2 174.5,252.9 179.5,249.0 184.5,240.0 189.4,224.5 194.4,214.2 199.4,191.6 204.4,187.3 209.3,189.4 214.3,172.9 219.3,177.7 224.3,171.9 229.3,160.5 234.2,147.5 239.2,145.9 244.2,149.2 249.2,165.3 254.1,163.0 259.1,162.6 264.1,162.2 269.1,161.8 274.1,161.4 279.0,161.0 284.0,160.6 289.0,160.2 294.0,159.8 298.9,166.8 303.9,162.0 308.9,160.2 313.9,154.9 318.9,140.9 323.8,136.5 328.8,141.3 333.8,145.2 338.8,146.5 343.8,145.0 348.7,150.2 353.7,153.2 358.7,144.8 363.7,143.3 368.6,154.0 373.6,143.7 378.6,140.8 383.6,141.6 388.6,132.5 393.5,129.0 398.5,132.5 403.5,128.0 408.5,116.5 413.4,108.5 418.4,98.2 423.4,92.7 428.4,84.8 433.4,79.8 438.3,85.8 443.3,89.0 448.3,85.1 453.3,79.0 458.2,81.8 463.2,72.1 468.2,76.7 473.2,76.2 478.2,75.8 483.1,75.5 488.1,75.1 493.1,74.7 498.1,74.3 503.1,73.9 508.0,73.5 513.0,73.1 518.0,72.7 523.0,72.3 527.9,68.8 532.9,70.5 537.9,61.9 542.9,61.7 547.9,57.0 552.8,56.2 557.8,57.2 562.8,55.2 567.8,56.3 572.7,59.6 577.7,58.9 582.7,54.2 587.7,51.3 592.7,48.2 597.6,48.0 602.6,37.7 607.6,34.3 612.6,39.2 617.5,34.5 622.5,36.8 627.5,37.2 632.5,41.9 637.5,40.4 642.4,39.4 647.4,29.5 652.4,31.4 657.4,30.2 662.4,38.2 667.3,41.3 672.3,39.6 677.3,33.3 682.3,33.1 687.2,26.5 692.2,24.9 697.2,27.3 702.2,26.9 707.2,26.5 712.1,26.1 717.1,25.7 722.1,25.4 727.1,25.0 732.0,24.6 737.0,24.2 742.0,24.0" fill="none" stroke="#C9952F" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity="1"/>
+<polyline points="60.0,279.6 65.0,279.2 70.0,278.8 74.9,278.5 79.9,278.6 84.9,275.5 89.9,273.6 94.8,278.1 99.8,277.4 104.8,271.3 109.8,266.7 114.8,263.6 119.7,266.8 124.7,263.0 129.7,264.0 134.7,262.2 139.6,258.6 144.6,256.4 149.6,257.0 154.6,257.9 159.6,255.6 164.5,256.0 169.5,257.8 174.5,255.1 179.5,251.8 184.5,244.5 189.4,231.6 194.4,223.2 199.4,204.8 204.4,201.2 209.3,202.4 214.3,189.1 219.3,192.5 224.3,187.7 229.3,178.4 234.2,167.7 239.2,166.1 244.2,168.4 249.2,181.0 254.1,179.5 259.1,179.1 264.1,178.7 269.1,178.3 274.1,177.9 279.0,177.5 284.0,177.1 289.0,176.8 294.0,176.4 298.9,181.0 303.9,176.9 308.9,175.4 313.9,171.0 318.9,159.6 323.8,155.8 328.8,159.4 333.8,162.4 338.8,163.2 343.8,161.8 348.7,165.9 353.7,168.1 358.7,161.3 363.7,159.9 368.6,167.4 373.6,159.0 378.6,156.4 383.6,157.0 388.6,149.6 393.5,146.6 398.5,149.2 403.5,145.5 408.5,136.1 413.4,129.6 418.4,121.0 423.4,116.3 428.4,109.8 433.4,105.7 438.3,109.9 443.3,112.2 448.3,109.0 453.3,103.9 458.2,106.0 463.2,98.0 468.2,102.0 473.2,101.6 478.2,101.2 483.1,100.9 488.1,100.5 493.1,100.1 498.1,99.7 503.1,99.3 508.0,98.9 513.0,98.5 518.0,98.1 523.0,97.7 527.9,95.4 532.9,96.2 537.9,89.1 542.9,88.9 547.9,85.0 552.8,84.3 557.8,84.9 562.8,83.2 567.8,84.0 572.7,86.6 577.7,85.9 582.7,82.0 587.7,79.6 592.7,77.0 597.6,76.7 602.6,68.3 607.6,65.4 612.6,69.2 617.5,65.3 622.5,67.0 627.5,67.2 632.5,70.8 637.5,69.5 642.4,68.6 647.4,60.5 652.4,61.9 657.4,60.8 662.4,67.1 667.3,69.4 672.3,67.9 677.3,62.6 682.3,62.4 687.2,57.0 692.2,55.6 697.2,57.8 702.2,57.4 707.2,57.0 712.1,56.6 717.1,56.2 722.1,55.8 727.1,55.4 732.0,55.0 737.0,54.6 742.0,54.4" fill="none" stroke="#3FA98C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity="1"/>
+<polyline points="60.0,279.6 65.0,279.2 70.0,278.8 74.9,278.5 79.9,278.8 84.9,275.3 89.9,273.2 94.8,278.5 99.8,277.8 104.8,270.9 109.8,265.9 114.8,262.4 119.7,266.2 124.7,262.0 129.7,263.2 134.7,261.2 139.6,257.2 144.6,254.9 149.6,255.7 154.6,256.8 159.6,254.4 164.5,254.8 169.5,256.9 174.5,254.0 179.5,250.3 184.5,242.2 189.4,227.9 194.4,218.6 199.4,198.1 204.4,194.1 209.3,195.7 214.3,180.8 219.3,184.9 224.3,179.6 229.3,169.3 234.2,157.4 239.2,155.8 244.2,158.5 249.2,172.9 254.1,171.0 259.1,170.6 264.1,170.2 269.1,169.8 274.1,169.4 279.0,169.0 284.0,168.6 289.0,168.2 294.0,167.8 298.9,173.7 303.9,169.2 308.9,167.5 313.9,162.7 318.9,149.9 323.8,145.9 328.8,150.0 333.8,153.5 338.8,154.5 343.8,153.1 348.7,157.7 353.7,160.3 358.7,152.7 363.7,151.3 368.6,160.3 373.6,150.9 378.6,148.2 383.6,148.9 388.6,140.6 393.5,137.3 398.5,140.4 403.5,136.3 408.5,125.8 413.4,118.6 418.4,109.1 423.4,104.0 428.4,96.8 433.4,92.2 438.3,97.3 443.3,100.1 448.3,96.5 453.3,90.9 458.2,93.3 463.2,84.5 468.2,88.8 473.2,88.4 478.2,88.0 483.1,87.6 488.1,87.2 493.1,86.8 498.1,86.4 503.1,86.0 508.0,85.6 513.0,85.2 518.0,84.8 523.0,84.4 527.9,81.5 532.9,82.7 537.9,74.9 542.9,74.7 547.9,70.4 552.8,69.6 557.8,70.4 562.8,68.6 567.8,69.5 572.7,72.5 577.7,71.8 582.7,67.5 587.7,64.8 592.7,62.0 597.6,61.8 602.6,52.4 607.6,49.2 612.6,53.5 617.5,49.3 622.5,51.3 627.5,51.6 632.5,55.7 637.5,54.3 642.4,53.4 647.4,44.4 652.4,46.0 657.4,44.8 662.4,52.0 667.3,54.7 672.3,53.1 677.3,47.3 682.3,47.1 687.2,41.0 692.2,39.5 697.2,41.9 702.2,41.5 707.2,41.1 712.1,40.7 717.1,40.3 722.1,39.9 727.1,39.5 732.0,39.1 737.0,38.7 742.0,38.5" fill="none" stroke="#0E7C66" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" opacity="1"/>
+<text x="60" y="12" font-size="11" fill="#8C8C93">Growth of $100,000, log scale, since first cycle entry (2015), net of 10% fee</text>
+</svg>
+      <div class="bt-legend">
+        <span class="bt-leg"><i style="background:#0E7C66"></i>Balanced <b class="tnum">5932&times;</b></span>
+        <span class="bt-leg"><i style="background:#3FA98C"></i>Conservative <b class="tnum">3346&times;</b></span>
+        <span class="bt-leg"><i style="background:#C9952F"></i>Aggressive <b class="tnum">10009&times;</b></span>
+        <span class="bt-leg"><i class="dash" style="background:#9A9AA2"></i>HODL 50/50 <b class="tnum">524&times;</b></span>
+        <span class="bt-leg"><i class="dash" style="background:#5E7CA0"></i>S&amp;P 500 <b class="tnum">3.8&times;</b></span>
+        <span class="bt-leg"><i class="dash" style="background:#B7AE99"></i>ETF 7%/yr <b class="tnum">2.2&times;</b></span>
+        <span class="bt-leg"><i class="dash" style="background:#C0703E"></i>MicroStrategy <b class="tnum">7&times;</b></span>
+      </div>
+    </div>
+
+    <div class="bt-grid reveal">
+      <div class="bt-card glass">
+        <div class="bt-card-name serif">Conservative</div>
+        <div class="bt-row"><span>Backtested cycle CAGR<sup>*</sup></span><b class="tnum">116%</b></div>
+        <div class="bt-row"><span>&hellip; of which LP yield</span><b class="tnum" style="color:var(--pos)">+12%</b></div>
+        <div class="bt-row"><span>Risk-adjusted (Calmar)</span><b class="tnum">2.1</b></div>
+        <div class="bt-row"><span>Worst drawdown</span><b class="tnum neg">&minus;55%</b></div>
+      </div>
+      <div class="bt-card glass">
+        <div class="bt-card-name serif">Balanced</div>
+        <div class="bt-row"><span>Backtested cycle CAGR<sup>*</sup></span><b class="tnum">128%</b></div>
+        <div class="bt-row"><span>&hellip; of which LP yield</span><b class="tnum" style="color:var(--pos)">+9%</b></div>
+        <div class="bt-row"><span>Risk-adjusted (Calmar)</span><b class="tnum">2.1</b></div>
+        <div class="bt-row"><span>Worst drawdown</span><b class="tnum neg">&minus;60%</b></div>
+      </div>
+      <div class="bt-card glass">
+        <div class="bt-card-name serif">Aggressive</div>
+        <div class="bt-row"><span>Backtested cycle CAGR<sup>*</sup></span><b class="tnum">139%</b></div>
+        <div class="bt-row"><span>&hellip; of which LP yield</span><b class="tnum" style="color:var(--pos)">+7%</b></div>
+        <div class="bt-row"><span>Risk-adjusted (Calmar)</span><b class="tnum">2.1</b></div>
+        <div class="bt-row"><span>Worst drawdown</span><b class="tnum neg">&minus;65%</b></div>
+      </div>
+    </div>
+
+    <div class="bt-method reveal">
+      <div class="bt-method-title serif">How this was measured, and what it does <em>not</em> promise</div>
+      <div class="bt-method-grid">
+        <div class="mc">
+          <div class="mc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6"/></svg></div>
+          <div><div class="mc-t">Real prices, almost no assumptions</div><p class="mc-p">Pure BTC/ETH spot prices the whole way (Bitstamp 2011+, Coinbase 2016+). The only modelled inputs are the msUSD/USDC LP yield (~17% net, from real Aerodrome emissions) earned while in stables, and trading costs. No leverage, no liquidation risk.</p></div>
+        </div>
+        <div class="mc">
+          <div class="mc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><div class="mc-t">Backtested, not a promise</div><p class="mc-p">The entry/exit timing is fit to only 2&ndash;3 past halving cycles, and the next live entry (~Oct 2026) has never been tested. The 4-year cycle may not repeat. It is already stretching.</p></div>
+        </div>
+        <div class="mc">
+          <div class="mc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 11h18"/></svg></div>
+          <div><div class="mc-t">Currently in the stablecoin LP</div><p class="mc-p">Returns are lumpy. The basket is held only during the ~18-month bull window. Right now every vault sits in a <b>100% stablecoin LP (msUSD/USDC) until the next entry (~Oct 2026)</b>, earning fees and rewards.</p></div>
+        </div>
+        <div class="mc">
+          <div class="mc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="M12 8.5v4"/><path d="M12 16h.01"/></svg></div>
+          <div><div class="mc-t">Risk is real</div><p class="mc-p">There is no stop while the basket is held, and on a deep dip we add to the basket, so it rides the full mid-bull drawdown. Backtested worst drops ran &minus;55% (Conservative) to &minus;65% (Aggressive).</p></div>
+        </div>
+      </div>
+      <p class="bt-disclaimer">*Backtested cycle CAGR since the 2015 entry across 3 halving cycles, not a forward promise. Backtested results are not live results. Past performance does not guarantee future results. This is not financial advice. Crypto can lose value rapidly, including your full deposit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RETURN CALCULATOR -->
+<section id="calc">
+  <div class="wrap calc-wrap">
+    <div class="sec-head reveal" style="max-width:620px">
+      <div class="sec-tag">See it on your numbers</div>
+      <h2 class="serif">What could this do with your deposit?</h2>
+      <p>Move the amount, pick a comfort level. We model it on the backtested cycle, and show our cut, because we only get paid when you gain.</p>
+    </div>
+    <div class="calc-card reveal">
+      <div class="calc-controls">
+        <div class="calc-field">
+          <label for="calcAmt">Your deposit</label>
+          <div class="calc-input-wrap">
+            <span class="cur">$</span>
+            <input id="calcAmt" type="text" inputmode="numeric" autocomplete="off" value="10,000" aria-label="Deposit amount in US dollars" />
+          </div>
+          <div class="calc-presets" role="group" aria-label="Quick amounts">
+            <button type="button" class="calc-preset" data-amt="100">Start with $100</button>
+            <button type="button" class="calc-preset" data-amt="1000">$1,000</button>
+            <button type="button" class="calc-preset" data-amt="10000">$10,000</button>
+            <button type="button" class="calc-preset" data-amt="50000">$50,000</button>
+          </div>
+        </div>
+        <div class="calc-field">
+          <label>Comfort level</label>
+          <div class="calc-profiles" role="group" aria-label="Risk profile">
+            <button type="button" class="calc-prof" data-prof="conservative" aria-pressed="false">Conservative</button>
+            <button type="button" class="calc-prof" data-prof="balanced" aria-pressed="true">Balanced</button>
+            <button type="button" class="calc-prof" data-prof="aggressive" aria-pressed="false">Aggressive</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-out">
+        <div class="calc-tile accent">
+          <div class="t-label">Earning before the entry</div>
+          <div class="t-val" id="calcLp">+$397</div>
+          <div class="t-sub" id="calcLpSub">~17% APR msUSD/USDC LP yield over the ~17 weeks until the Oct&nbsp;19 entry.</div>
+        </div>
+        <div class="calc-tile">
+          <div class="t-label">Backtested 1-cycle value, net</div>
+          <div class="t-val" id="calcCycle">$60k&ndash;$172k</div>
+          <div class="t-sub" id="calcCycleSub">After our 10% fee. Backtested across 3 past cycles, <b>not a forecast</b>. You'd ride a −60% drawdown along the way.</div>
+        </div>
+        <div class="calc-tile">
+          <div class="t-label">Our fee, only on profit</div>
+          <div class="t-val" id="calcFee">$18k</div>
+          <div class="t-sub">10% of the gain we make you, above your high-water mark. <b>$0</b> in any period you don't make money.</div>
+        </div>
+      </div>
+
+      <div class="calc-cta">
+        <a href="https://app.fonte.finance/onboarding" class="btn btn-ink btn-lg calc-cta-btn">Start now <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <span class="calc-cta-note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Start with as little as $100 &middot; withdraw anytime</span>
+      </div>
+      <p class="calc-disc">
+        Modeled on the backtested halving-cycle CAGR (Conservative ~116% · Balanced ~128% · Aggressive ~139%, net of the 10% fee) across the last 3 cycles, the same backtest shown above. The low end of the range assumes the next cycle delivers only a fraction of that. Backtested results are not live results; the next entry (~Oct 2026) has never been tested and the 4-year pattern is already stretching. Crypto can fall hard and fast. Not financial advice.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section id="dash">
+  <div class="wrap">
+    <div class="sec-head reveal" style="max-width:620px">
+      <div class="sec-tag">Your dashboard</div>
+      <h2 class="serif">Everything, in one calm view.</h2>
+      <p>Check it from anywhere. See exactly what you own, what it is earning, and what we have charged, to the cent.</p>
+    </div>
+    <div class="dash-shell reveal">
+      <div class="dash-bar"><div class="dots"><i></i><i></i><i></i></div><div class="addr mono">0x2006…363B · Balanced</div></div>
+      <div class="dash-body">
+        <div class="dash-grid">
+          <div>
+            <div class="dlabel">Total value</div>
+            <div class="dval tnum">$24,318.40</div>
+            <span class="dchip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v6m0 0 3-3m-3 3L9 6M5 12h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg> Stable phase · stablecoin LP (msUSD/USDC)</span>
+            <div class="dmetrics">
+              <div class="dmetric"><div class="k">Strategy</div><div class="v">BTC / ETH cycle</div></div>
+              <div class="dmetric"><div class="k">Backtested CAGR</div><div class="v pos tnum">~128%</div></div>
+              <div class="dmetric"><div class="k">Worst dip</div><div class="v tnum">60%</div></div>
+            </div>
+            <div style="margin-top:8px">
+              <div class="dpos-row"><div class="dpos-left"><div class="dpos-ic" style="background:#0E7C66">$</div><div><div class="dpos-name">Stablecoin LP (msUSD/USDC)</div><div class="dpos-sub">Stable phase · earning yield now</div></div></div><div class="dpos-right"><div class="dpos-val tnum">$24,318</div><div class="dpos-apr">100%</div></div></div>
+              <div class="dpos-row" style="opacity:.55"><div class="dpos-left"><div class="dpos-ic" style="background:#F7931A">&#8383;</div><div><div class="dpos-name">BTC core (spot)</div><div class="dpos-sub">Deploys at next entry &middot; ~Oct 2026</div></div></div><div class="dpos-right"><div class="dpos-val tnum">$0</div><div class="dpos-apr" style="color:#9A9BA2">40% target</div></div></div>
+              <div class="dpos-row" style="opacity:.55"><div class="dpos-left"><div class="dpos-ic" style="background:#B06A3B">&#926;</div><div><div class="dpos-name">ETH core (spot)</div><div class="dpos-sub">Deploys at next entry &middot; ~Oct 2026</div></div></div><div class="dpos-right"><div class="dpos-val tnum">$0</div><div class="dpos-apr" style="color:#9A9BA2">40% target</div></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="dmetric" style="margin-bottom:14px">
+              <div class="k" style="margin-bottom:14px">Allocation</div>
+              <div class="donut-wrap">
+                <svg width="118" height="118" viewBox="0 0 42 42" aria-hidden="true">
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#2C2D33" stroke-width="6"/>
+                  <circle cx="21" cy="21" r="15.9" fill="none" stroke="#0E7C66" stroke-width="6" stroke-dasharray="100 0" stroke-dashoffset="25"/>
+                </svg>
+                <div style="font-size:13px;color:#B7B7BC;line-height:2">
+                  <div><span class="swatch" style="background:#0E7C66"></span> Stablecoin LP (msUSD/USDC) 100% <span style="color:#7C7D84">(stable phase)</span></div>
+                  <div style="opacity:.55"><span class="swatch" style="background:#F7931A"></span> BTC core 40% <span style="color:#7C7D84">(at entry)</span></div>
+                  <div style="opacity:.55"><span class="swatch" style="background:#B06A3B"></span> ETH core 40% <span style="color:#7C7D84">(at entry)</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="dmetric">
+              <div class="k">Performance fee charged (this yr)</div>
+              <div class="v tnum">$214.30</div>
+              <div style="color:#8A8B92;font-size:12.5px;margin-top:6px;line-height:1.5">10% of the profit we make you above your high-water mark. $0 on any month you do not make money.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:28px"><a href="app.html#demo" class="btn btn-ghost" style="background:rgba(127,217,195,.08);border-color:rgba(127,217,195,.4);color:#7FD9C3">See a sample dashboard <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="margin-left:2px"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+  </div>
+</section>
+
+<!-- FEES -->
+<section id="fees">
+  <div class="wrap">
+    <div class="fee-grid">
+      <div class="reveal">
+        <div class="sec-tag">Pricing</div>
+        <h2 class="serif">We only get paid when you make money.</h2>
+        <p style="color:var(--ink-2);font-size:19px;margin-top:16px;line-height:1.5;max-width:42ch">No management fee. No fee to join. No fee to leave. Just a share of the profit we actually make you.</p>
+        <div class="hwm"><b>High-water mark on trades, always.</b> If a position dips and recovers, you pay nothing until you are back above your previous peak. You never pay twice for the same gains.</div>
+      </div>
+      <div class="fee-card glass reveal">
+        <div class="fee-big tnum">10%</div>
+        <div style="color:var(--ink-2);font-weight:500;margin-bottom:6px">of what we earn you, and nothing else.</div>
+        <ul class="fee-list">
+          <li><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Stablecoin LP yield</b><span>10% of the LP yield (fees + rewards) earned in the bear phase. Accrued continuously, charged only on yield earned. Never on your deposit.</span></div></li>
+          <li><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>BTC / ETH cycle gains</b><span>10% of realised profit when we sell the basket near the cycle top, with a high-water mark. Charged only on closed gains, never on paper.</span></div></li>
+          <li><span class="tick"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>A flat or losing month?</b><span>You pay <b>$0</b>. No profit means no fee taken.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="safe">
+  <div class="wrap">
+    <div class="safe-grid">
+      <div class="reveal">
+        <div class="sec-tag">Security</div>
+        <h2 class="serif">Your keys. Your crypto. Always.</h2>
+        <p style="color:var(--ink-2);font-size:18px;margin-top:14px;max-width:44ch">Fonte is fully non-custodial. Your funds live in a smart wallet that only <em>you</em> can withdraw from. We get a narrow, revocable permission to manage strategies, and that is it.</p>
+        <div class="safe-feats">
+          <div class="safe-feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/></svg></div><div><h4>We can manage, never withdraw</h4><p>Our keeper can only trade BTC/ETH, lend and provide stablecoin liquidity, and rebalance. It physically cannot move funds to anyone but you.</p></div></div>
+          <div class="safe-feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.7"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Audited protocols only</h4><p>Aave and Aerodrome, blue-chip, audited, billions in TVL. Never a three-week-old farm chasing a flashy number.</p></div></div>
+          <div class="safe-feat"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M9 6h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Revoke in one click</h4><p>Change your mind anytime. Pull our permission and withdraw everything. No notice, no lock-in, no penalty.</p></div></div>
+        </div>
+      </div>
+      <div class="safe-visual reveal">
+        <div class="dlabel" style="color:#9A9BA2">Your smart wallet</div>
+        <div style="font-family:'Fraunces';font-size:24px;font-weight:600;margin:6px 0 22px">Permissions</div>
+        <div class="keyline"><div class="kic" style="background:rgba(127,217,195,.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#7FD9C3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="kt">Trade BTC/ETH, lend &amp; provide liquidity</div><div class="ks">Allowed, scoped to audited venues</div></div></div>
+        <div class="keyflow"></div>
+        <div class="keyline"><div class="kic" style="background:rgba(127,217,195,.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#7FD9C3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="kt">Rebalance the cycle</div><div class="ks">Allowed, keeps your mix on target</div></div></div>
+        <div class="keyflow"></div>
+        <div class="keyline"><div class="kic" style="background:rgba(192,73,47,.16)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#E8927B" stroke-width="2.2" stroke-linecap="round"/></svg></div><div><div class="kt">Withdraw to anyone but you</div><div class="ks" style="color:#E8927B">Blocked, only you can cash out</div></div></div>
+      </div>
+    </div>
+    <div class="audit-band glass reveal" style="margin-top:40px;border-radius:var(--radius);padding:28px 34px;display:flex;align-items:center;gap:34px;flex-wrap:wrap;justify-content:space-between">
+      <div style="min-width:250px;flex:1">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="var(--accent)" stroke-width="1.7"/><path d="M9 12l2 2 4-4" stroke="var(--accent)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-weight:600;font-size:16px">Bullet-proof smart contracts</span>
+        </div>
+        <p style="color:var(--ink-2);font-size:14.5px;line-height:1.5;max-width:46ch">Independently audited, and built only on protocols that are themselves audited and battle-tested: Aave and Aerodrome.</p>
+      </div>
+      <div>
+        <div style="color:var(--ink-3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Audited by</div>
+        <div style="display:flex;align-items:center;gap:30px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:10px" title="OpenZeppelin">
+            <svg width="27" height="27" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2.2l12.1 7v13.6l-12.1 7-12.1-7V9.2z" fill="#4E5EE4"/><path d="M16 9.4l6.6 3.8v7.6L16 24.6l-6.6-3.8v-7.6z" fill="#fff"/><path d="M16 13l3 1.75v3.5L16 20l-3-1.75v-3.5z" fill="#4E5EE4"/></svg>
+            <span style="font-weight:700;font-size:17px;color:#1B1C20;letter-spacing:-.01em">OpenZeppelin</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px" title="Trail of Bits">
+            <svg width="27" height="27" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#16161A"/><path d="M9 11h14M16 11.5v12" stroke="#E0533D" stroke-width="2.6" stroke-linecap="round"/></svg>
+            <span style="font-weight:700;font-size:17px;color:#1B1C20;letter-spacing:-.01em">Trail of Bits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;max-width:none;margin-bottom:40px"><h2 class="serif">Questions, answered plainly.</h2></div>
+    <div class="faq">
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">Can you run off with my money?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>No, and not because we promise. Because we cannot. Your funds sit in a smart wallet only you can withdraw from. Our permission is limited to managing strategies inside audited protocols. We never touch the exit door.</p></div></div>
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">What can I realistically expect to make?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>Our Balanced portfolio backtested to roughly a 128% cycle CAGR across the last three halving cycles (including the msUSD/USDC LP yield earned in both phases), but returns are lumpy and a backtest is not a promise. Most of the gain lands in the ~18-month post-halving bull; the rest of the time you sit in a stablecoin LP. Expect a drawdown of up to 60% along the way. We show the realistic worst case up front, because that is the honest thing to do.</p></div></div>
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">How is this different from just buying Bitcoin?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>We hold the same BTC &amp; ETH you would, but timed to the halving cycle: fully invested through the post-halving bull, then rotated into a 100% auto-rebalanced stablecoin LP in the bear to step aside from the worst drawdowns. In backtests that roughly halved the max drawdown versus simply holding. We benchmark against buy-and-hold, and if we cannot beat it, we will tell you.</p></div></div>
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">Can't I just do this myself in October?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>You can, and buying in October is the easy part. The hard part, and where the returns actually come from, is everything after: holding through a 55% to 65% mid-bull drawdown without selling, taking profit near the top years later when every instinct says to hold, and running the bear-phase stablecoin LP the whole time (re-centering the range, harvesting rewards). Most people who plan to "just do it themselves" miss the entry when it feels scary, panic out in the dip, or round-trip the top. Fonte does all of that automatically and non-custodially, and only charges 10% of the profit it makes you. If you know you will execute every step with iron discipline, do it yourself; you do not need us. For everyone else, that discipline is exactly what you are paying for.</p></div></div>
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">When exactly do you charge the fee?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>10% of what we make you, above a high-water mark. On the stablecoin LP yield it accrues continuously and is charged only on yield earned. On the BTC/ETH cycle, only on realised gains when we sell near the top. If your account is below its previous high, you pay nothing until it recovers.</p></div></div>
+      <div class="q reveal"><button class="q-btn" aria-expanded="false">Can I take my money out whenever I want?<span class="chev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><div class="q-body"><p>Yes. There is no lock-up. Revoke our permission and withdraw everything in a couple of clicks. Some positions take a short moment to unwind, but nothing holds your funds hostage.</p></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap">
+    <h2 class="serif">Start now, before the October entry.</h2>
+    <p>You're early, and that's the point. Set up now, earn LP yield while you wait, and be in place the day we deploy into the cycle.</p>
+    <a href="https://app.fonte.finance/onboarding" class="btn btn-ink btn-lg">Start now</a>
+    <div style="margin-top:18px;color:rgba(255,255,255,.7);font-size:14px">Non-custodial · Start with $100 · Withdraw anytime</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="logo" href="#top" style="font-size:21px"><span class="mark" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3.2C12 3.2 5.5 10.3 5.5 15a6.5 6.5 0 0 0 13 0C18.5 10.3 12 3.2 12 3.2Z" fill="#fff"/></svg></span> Fonte</a>
+        <p>Professionally managed crypto, built for people who would rather live their life than watch charts.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col"><h5>Product</h5><a href="https://app.fonte.finance/onboarding">Start now</a><a href="#how">How it works</a><a href="#profiles">Portfolios</a><a href="#fees">Pricing</a><a href="#dash">Dashboard</a><a href="business.html">For funds</a></div>
+        <div class="foot-col"><h5>Trust</h5><a href="#safe">Security</a><a href="#faq">FAQ</a><a href="#safe">Audits</a></div>
+        <div class="foot-col"><h5>Company</h5><a href="about.html">About</a><a href="contact.html">Contact</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>
+      </div>
+    </div>
+    <div class="foot-legal">Crypto assets are volatile and you can lose money, including your entire investment. Nothing here is financial advice or an offer of securities. Performance targets are illustrative, not guarantees. Audit references are illustrative. Managed-account and performance-fee arrangements may be regulated activities in your jurisdiction. Obtain qualified legal and tax advice before operating.</div>
+    <div class="foot-bottom"><span>&copy; 2026 Fonte. All rights reserved.</span><span>Built with care · Non-custodial by design</span></div>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8),{passive:true});
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  document.querySelectorAll('.q-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const q=btn.parentElement, body=q.querySelector('.q-body'), open=q.classList.toggle('open');
+      btn.setAttribute('aria-expanded',open);
+      body.style.maxHeight = open ? body.scrollHeight+'px' : '0';
+    });
+  });
+
+  /* ── October-entry countdown + net-return calculator ── */
+  (function(){
+    const ENTRY = new Date('2026-10-19T00:00:00Z');
+    const dayMs = 86400000;
+    const daysLeft = Math.max(0, Math.round((ENTRY - new Date())/dayMs));
+    const weeksLeft = Math.max(0, Math.round(daysLeft/7));
+    const huEl = document.getElementById('huWeeks');
+    if (huEl) huEl.textContent = weeksLeft > 0 ? `~${weeksLeft} weeks` : 'Now';
+
+    // backtested per-cycle GROSS multiple = cube root of the published 3-cycle multipliers
+    const PROF = {
+      conservative: { mult: 14.96, dd: 55 },
+      balanced:     { mult: 18.10, dd: 60 },
+      aggressive:   { mult: 21.60, dd: 65 },
+    };
+    const LP_APR = 0.17, FEE = 0.10, HAIRCUT = 0.33; // low end = a third of the backtested gain
+    let amt = 10000, prof = 'balanced';
+
+    const money = n => Math.round(n).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+    const compact = n => n>=1e6 ? '$'+(n/1e6).toFixed(n>=1e7?0:1)+'M' : n>=1e3 ? '$'+Math.round(n/1e3)+'k' : money(n);
+    const parse = s => { const v = parseFloat(String(s).replace(/[^0-9.]/g,'')); return isFinite(v)&&v>0 ? v : 0; };
+
+    const elAmt=document.getElementById('calcAmt'), elLp=document.getElementById('calcLp'),
+          elLpSub=document.getElementById('calcLpSub'), elCyc=document.getElementById('calcCycle'),
+          elCycSub=document.getElementById('calcCycleSub'), elFee=document.getElementById('calcFee');
+
+    function render(){
+      const p = PROF[prof];
+      const lp = amt * LP_APR * (daysLeft/365);
+      const grossProfit = amt * (p.mult - 1);
+      const netHigh = amt + grossProfit * (1-FEE);
+      const netLow  = amt + grossProfit * HAIRCUT * (1-FEE);
+      const fee = grossProfit * FEE;
+      if (elLp)  elLp.textContent = '+' + money(lp);
+      if (elLpSub) elLpSub.textContent = daysLeft>0
+        ? `~17% APR msUSD/USDC LP yield over the ~${weeksLeft} weeks until the Oct 19 entry.`
+        : `~17% APR msUSD/USDC LP yield while between cycles.`;
+      if (elCyc) elCyc.textContent = compact(netLow) + '–' + compact(netHigh);
+      if (elCycSub) elCycSub.innerHTML = `After our 10% fee. Backtested across 3 past cycles, <b>not a forecast</b>. You'd ride a −${p.dd}% drawdown along the way.`;
+      if (elFee) elFee.textContent = compact(fee);
+    }
+    if (elAmt){
+      elAmt.addEventListener('input', ()=>{ amt = parse(elAmt.value); render(); });
+      elAmt.addEventListener('blur', ()=>{ elAmt.value = amt ? amt.toLocaleString('en-US') : ''; });
+    }
+    document.querySelectorAll('.calc-preset').forEach(b=>b.addEventListener('click',()=>{
+      amt = parse(b.dataset.amt); if(elAmt) elAmt.value = amt.toLocaleString('en-US'); render();
+    }));
+    document.querySelectorAll('.calc-prof').forEach(b=>b.addEventListener('click',()=>{
+      prof = b.dataset.prof;
+      document.querySelectorAll('.calc-prof').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true':'false'));
+      render();
+    }));
+    render();
+  })();
+</script>
+</body>
+</html>
